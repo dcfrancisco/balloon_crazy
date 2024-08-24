@@ -12,7 +12,9 @@ class BalloonCrazy extends FlameGame with HasCollisionDetection {
   BalloonCrazy()
       : super(
           camera: CameraComponent.withFixedResolution(
-              width: gameWidth, height: gameHeight),
+            width: gameWidth,
+            height: gameHeight,
+          ),
         );
 
   final rand = math.Random();
