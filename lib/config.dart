@@ -1,2 +1,3 @@
-const gameWidth = 820.0;
+const gameWidth = 1600.0;
 const gameHeight = 820.0;
+const balloonRadius = gameWidth * 0.05;

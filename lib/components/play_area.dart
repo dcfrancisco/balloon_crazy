@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 class PlayArea extends RectangleComponent with HasGameReference<BalloonCrazy> {
   PlayArea()
       : super(
-          paint: Paint()..color = const Color(0xfff2e8cf),
+          paint: Paint()..color = const Color.fromARGB(255, 29, 20, 37),
           children: [RectangleHitbox()],
         );
 

@@ -8,7 +8,7 @@ import 'package:flame/game.dart';
 import 'components/components.dart';
 import 'config.dart';
 
-class BalloonCrazy extends FlameGame with HasCollisionDetection {
+class BalloonCrazy extends FlameGame {
   BalloonCrazy()
       : super(
           camera: CameraComponent.withFixedResolution(
