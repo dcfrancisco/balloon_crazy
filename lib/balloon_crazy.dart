@@ -1,51 +1,47 @@
 import 'dart:async';
-import 'dart:math' as math;
-
-import 'package:balloon_crazy/components/play_area.dart';
+import 'package:balloon_crazy/components/balloon.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-
-import 'components/components.dart';
-import 'config.dart';
+import 'package:balloon_crazy/config.dart'; // Import your config file
 
 class BalloonCrazy extends FlameGame {
-  BalloonCrazy()
-      : super(
-          camera: CameraComponent.withFixedResolution(
-            width: gameWidth,
-            height: gameHeight,
-          ),
-        );
-
-  final rand = math.Random();
-
-  double get width => size.x;
-  double get height => size.y;
-
   @override
-  FutureOr<void> onLoad() async {
+  Future<void> onLoad() async {
     super.onLoad();
 
-    camera.viewfinder.anchor = Anchor.topLeft;
+    // Define the number of rows and columns for the balloon grid
+    const rows = 4;
+    const columns = 15;
 
-    world.add(PlayArea());
+    // Define the size of each balloon
+    final balloonSize = Vector2(
+        balloonRadius * 2, balloonRadius * 2); // Use balloonRadius from config
 
-    const balloonCount = 10;
+    // Calculate the total width of the balloon grid
+    final totalGridWidth = columns * (balloonSize.x + horizontalSpacing);
 
-    for (var i = 0; i < balloonCount; i++) {
-      final balloon = Balloon(
-        velocity: Vector2(
-          rand.nextDouble() * 100 - 50,
-          rand.nextDouble() * 100 - 50,
-        ),
-        position: Vector2(
-          rand.nextDouble() * width,
-          rand.nextDouble() * height,
-        ),
-        radius: 20 + rand.nextDouble() * 40,
-      );
+    // Calculate the X offset to center the grid horizontally
+    final startX = (gameWidth - totalGridWidth) / 2;
 
-      world.add(balloon);
+    // Loop through rows and columns to add balloons to the game
+    for (int row = 0; row < rows; row++) {
+      for (int col = 0; col < columns; col++) {
+        final balloon = Balloon(
+          position: Vector2(
+            startX +
+                col *
+                    (balloonSize.x +
+                        horizontalSpacing), // X position centered horizontally
+            topSpacing +
+                row *
+                    (balloonSize.y +
+                        verticalSpacing), // Y position, adjusted by topSpacing
+          ),
+          size: balloonSize, // Size of the balloon based on balloonRadius
+          velocity: Vector2(0, 0), // Stationary at first
+        );
+        add(balloon);
+      }
     }
   }
 }
