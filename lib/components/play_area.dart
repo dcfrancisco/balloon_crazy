@@ -15,12 +15,9 @@ class PlayArea extends RectangleComponent with HasGameReference<BalloonCrazy> {
   @override
   FutureOr<void> onLoad() async {
     super.onLoad();
-
-    // Use the size property directly from the game (FlameGame)
-    size = Vector2(
-        gameWidth, gameHeight); // gameRef.size gives you the current game size
-
-    // Set the position (optional) if you want to adjust where the play area starts
-    position = Vector2(0, 0); // Top-left corner
+    size = Vector2(gameWidth * 0.8,
+        gameHeight * 0.8); // Make PlayArea 80% of the game size
+    position =
+        Vector2(gameWidth * 0.1, gameHeight * 0.1); // Center it with margins
   }
 }

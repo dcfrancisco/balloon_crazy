@@ -1,7 +1,7 @@
 // config.dart
-const gameWidth = 1600.0;
-const gameHeight = 820.0;
-const balloonRadius = gameWidth * 0.02;
+const gameWidth = 820.0;
+const gameHeight = 1600.0;
+const balloonRadius = gameWidth * 0.5;
 
 // Spacing and layout adjustments
 const topSpacing =
