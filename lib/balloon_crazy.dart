@@ -6,7 +6,6 @@ import 'package:balloon_crazy/config.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/material.dart';
 
 enum PlayState { welcome, playing, gameOver, won }
 
@@ -27,12 +26,14 @@ class BalloonCrazy extends FlameGame
   Future<void> onLoad() async {
     super.onLoad();
 
+    // Adjust rows and columns based on available space
     const rows = 4;
-    const columns = 10;
+    const columns = 10; // Adjust the number of columns
 
-    final balloonSize = Vector2(30, 30); // Balloon size
-    const spacingX = 5.0; // Horizontal spacing
-    const spacingY = 5.0; // Vertical spacing
+    // Define the size of each balloon
+    final balloonSize = Vector2(50, 50); // New balloon size
+    const spacingX = 20.0; // Horizontal spacing
+    const spacingY = 20.0; // Vertical spacing
 
     camera.viewfinder.anchor = Anchor.topLeft;
 
@@ -51,9 +52,8 @@ class BalloonCrazy extends FlameGame
     // Calculate the starting x position to center the grid
     final startX = (gameWidth - totalGridWidth) / 2;
 
-    // Calculate the starting y position to fit within the play area
-    final startY = playArea.size.y / 2 -
-        (rows * (balloonSize.y + spacingY) - spacingY) / 2;
+    // Position the balloons 50 pixels below the title
+    final startY = gameTitle.position.y + gameTitle.height + 250;
 
     for (int row = 0; row < rows; row++) {
       for (int col = 0; col < columns; col++) {
@@ -65,7 +65,7 @@ class BalloonCrazy extends FlameGame
           size: balloonSize,
           velocity: Vector2(0, 0),
         );
-        add(balloon);
+        world.add(balloon);
       }
     }
 

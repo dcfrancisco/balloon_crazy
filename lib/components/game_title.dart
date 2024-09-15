@@ -37,7 +37,7 @@ class GameTitle extends PositionComponent {
               fontWeight: FontWeight.bold)), // Green
       TextPaint(
           style: const TextStyle(
-              color: Color(0xFF0000FF),
+              color: Color.fromARGB(255, 85, 0, 255),
               fontSize: crazyFontSize,
               fontWeight: FontWeight.bold)), // Blue
     ];
