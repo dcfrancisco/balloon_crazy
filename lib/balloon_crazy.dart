@@ -31,7 +31,7 @@ class BalloonCrazy extends FlameGame
     const columns = 10; // Adjust the number of columns
 
     // Define the size of each balloon
-    final balloonSize = Vector2(50, 50); // New balloon size
+    final balloonSize = Vector2(55, 55); // New balloon size
     const spacingX = 20.0; // Horizontal spacing
     const spacingY = 20.0; // Vertical spacing
 
@@ -50,7 +50,7 @@ class BalloonCrazy extends FlameGame
     final totalGridWidth = columns * (balloonSize.x + spacingX) - spacingX;
 
     // Calculate the starting x position to center the grid
-    final startX = (gameWidth - totalGridWidth) / 2;
+    final startX = ((gameWidth - totalGridWidth) / 2) + 20;
 
     // Position the balloons 50 pixels below the title
     final startY = gameTitle.position.y + gameTitle.height + 250;
