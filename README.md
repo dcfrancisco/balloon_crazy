@@ -4,6 +4,12 @@
 
 ![Balloon Crazy](assets/305-1.png)
 
+## Work in Progress
+
+🚧 **This project is still a work in progress.** 🚧
+
+We are actively working on adding new features, improving gameplay mechanics, and fixing bugs. Stay tuned for updates!
+
 ## Game Mechanics
 
 ### Objective
