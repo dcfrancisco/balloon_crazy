@@ -58,9 +58,19 @@ To run this Flutter project, follow these steps:
    flutter run
    ```
 
+## Source Code
+
+The original source code for Balloon Crazy, as typed in from the December 1985 issue of COMPUTE! magazine, is included in this repository. You can find the `BALLOON.BAS` file in the `assets` folder.
+
+- [BALLOON.BAS](assets/BALLOON.BAS)
+
 ## Source
 The original source code and detailed game description are from the December 1985 issue of COMPUTE! magazine. Here's the citation:
 
 - Joseph Russ, "Balloon Crazy," COMPUTE! Magazine, Issue 67, December 1985. Available online at [AtariMagazines.com](https://www.atarimagazines.com/compute/issue67/305_1_BALLOON_CRAZY.php).
 
 Enjoy the delightful and challenging world of Balloon Crazy! Catch those balloons, score high, and become the ultimate Balloon Crazy champion!
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
