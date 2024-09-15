@@ -17,12 +17,12 @@ class Balloon extends SpriteComponent {
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    sprite = await Sprite.load('red_balloon.png'); // Load the balloon image
+    sprite = await Sprite.load('red_balloon.png');
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    position += velocity * dt; // Update position based on velocity
+    position += velocity * dt;
   }
 }
