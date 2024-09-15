@@ -4,8 +4,8 @@ import 'package:flutter/painting.dart';
 import 'package:balloon_crazy/config.dart';
 
 class GameTitle extends PositionComponent {
-  static const double balloonFontSize = 15.0;
-  static const double crazyFontSize = 20.0;
+  static const double balloonFontSize = 30.0;
+  static const double crazyFontSize = 40.0;
 
   GameTitle() {
     // Define the title colors
@@ -46,19 +46,16 @@ class GameTitle extends PositionComponent {
     final title = TextComponent(text: 'Balloon ', textRenderer: whitePaint);
     final crazyLetters = 'CRAZY!'.split('');
 
-    // Position and add each letter of "CRAZY!" with a different color
-    double xOffset = title.size.x + 10; // Start after "Balloon"
+    double xOffset = title.size.x + 10;
     for (int i = 0; i < crazyLetters.length; i++) {
       final letter = TextComponent(
           text: crazyLetters[i], textRenderer: colors[i % colors.length]);
       letter.position = Vector2(xOffset, 0);
       add(letter);
-      xOffset += letter.size.x; // Move position for the next letter
+      xOffset += letter.size.x;
     }
 
-    // Add the "Balloon" title and the "CRAZY!" letters to the component
+    position = Vector2((gameWidth * .05), 30);
     add(title);
-    position = Vector2(
-        gameWidth * .25, 15); // Position the title a few spaces from the left
   }
 }
