@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:balloon_crazy/components/balloon.dart';
+import 'package:balloon_crazy/components/game_title.dart';
 import 'package:balloon_crazy/config.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
@@ -24,11 +25,16 @@ class BalloonCrazy extends FlameGame {
     const spacingX = 5.0; // Horizontal spacing
     const spacingY = 5.0; // Vertical spacing
 
+    final gameTitle = GameTitle();
+    add(gameTitle);
+
     // Calculate the total width of the balloon grid
-    final totalGridWidth = columns * (balloonSize.x + spacingX);
+    final totalGridWidth =
+        columns * (balloonSize.x + spacingX) - spacingX; // Adjust total width
 
     // Calculate the X offset to center the grid horizontally
-    final startX = 35.0; //(gameWidth - totalGridWidth) / 2;
+    final startX =
+        (gameWidth - totalGridWidth) / 2; // Reverting to centered calculation
 
     // Loop through rows and columns to add balloons to the game
     for (int row = 0; row < rows; row++) {
@@ -36,7 +42,7 @@ class BalloonCrazy extends FlameGame {
         final balloon = Balloon(
           position: Vector2(
             startX + col * (balloonSize.x + spacingX), // X position
-            50 +
+            100 +
                 row * (balloonSize.y + spacingY), // Y position with top spacing
           ),
           size: balloonSize, // Size of the balloon
