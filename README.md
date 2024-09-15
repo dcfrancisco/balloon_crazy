@@ -77,8 +77,8 @@ The original source code for Balloon Crazy, as typed in from page 59 of the Dece
 ## Source
 The original source code and detailed game description are from the December 1985 issue of COMPUTE! magazine. Here's the citation:
 
-- Joseph Russ, "Balloon Crazy," COMPUTE! Magazine, Issue 67, December 1985. Available online at [AtariMagazines.com](https://www.atarimagazines.com/compute/issue67/305_1_BALLOON_CRAZY.php).
-
+- Joseph Russ, "Balloon Crazy," [COMPUTE! Magazine, Issue 67, December 1985](https://archive.org/embed/1985-12-compute-magazine). Available online at [AtariMagazines.com](https://www.atarimagazines.com/compute/issue67/305_1_BALLOON_CRAZY.php).
+  
 Enjoy the delightful and challenging world of Balloon Crazy! Catch those balloons, score high, and become the ultimate Balloon Crazy champion!
 
 ## License
