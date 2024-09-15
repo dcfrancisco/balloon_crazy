@@ -69,9 +69,10 @@ To run this Flutter project, follow these steps:
 
 ## Source Code
 
-The original source code for Balloon Crazy, as typed in from the December 1985 issue of COMPUTE! magazine, is included in this repository. You can find the `BALLOON.BAS` file in the `assets` folder.
+The original source code for Balloon Crazy, as typed in from page 59 of the December 1985 issue of COMPUTE! magazine, is included in this repository. You can find the `BALLOON.BAS` file in the `assets` folder.
 
 - [BALLOON.BAS](assets/BALLOON.BAS)
+  - Version by Charles Brannon
 
 ## Source
 The original source code and detailed game description are from the December 1985 issue of COMPUTE! magazine. Here's the citation:
