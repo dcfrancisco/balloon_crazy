@@ -1,6 +1,6 @@
 # Balloon Crazy
 
-**Balloon Crazy** is a whimsical and challenging game where players ride a skateboard to catch falling balloons on top of their head. Originally designed for Atari computers, this engaging game is now available for multiple platforms including Apple II, Commodore 64, IBM PC/PCjr, and TI-99/4A.
+**Balloon Crazy** is a whimsical and challenging game where players ride a skateboard to catch falling balloons on top of their head. Originally designed for Atari computers, this engaging game is now available for multiple platforms including Apple II, Commodore 64, IBM PC/PCjr, and TI-99/4A. This version is a modern adaptation built using Flutter.
 
 ![Balloon Crazy](assets/305-1.png)
 
@@ -11,8 +11,7 @@ The main objective is to catch falling balloons by positioning the player charac
 
 ### Gameplay
 1. **Movement**: 
-   - Use the joystick or keyboard (depending on the version) to move your player left and right across the screen.
-   - In some versions, you can use paddle controllers instead of a joystick.
+   - Use the on-screen controls or keyboard to move your player left and right across the screen.
 
 2. **Catching Balloons**: 
    - Balloons fall from the top of the screen in different colors and speeds:
@@ -23,10 +22,9 @@ The main objective is to catch falling balloons by positioning the player charac
 
 3. **Scoring**:
    - Points are scored based on the type of balloon caught:
-     - For example, in some versions:
-       - Blue balloon = 10 points
-       - Green balloon = 20 points
-       - Red balloon = 30 points.
+     - Blue balloon = 10 points
+     - Green balloon = 20 points
+     - Red balloon = 30 points.
    - Points are added to your score only when a required number of balloons are caught and you pop them by pressing the fire button or a specific key.
 
 4. **Bouncing Balloons**:
@@ -40,32 +38,31 @@ The main objective is to catch falling balloons by positioning the player charac
 6. **Game Over**:
    - The game ends if you lose all three players by missing balloons and falling off the skateboard.
 
-### Platform-Specific Controls
-
-#### Atari
-- **Joystick**: Moves player left and right.
-- **Fire button**: Bounces missed balloons.
-- Paddle controllers can be used with specific modifications to the code.
-
-#### Commodore 64
-- **Joystick (Port 2)**: Moves player left and right.
-- **Fire button**: Bounces missed balloons.
-
-#### Apple II
-- **Paddle**: Moves player left and right.
-- **Paddle button**: Bounces missed balloons.
-- **Keyboard (IIc/IIe)**: `Open-Apple` key to move left, `Closed-Apple` key to move right, `Space bar` to bounce.
-
-#### IBM PC/PCjr
-- **Joystick (adjustable)**: Moves player left and right.
-- **Paddle button**: Used for adjusting or applying settings.
-
-#### TI-99/4A
-- **Keyboard**: 'S' key to move left and 'D' key to move right.
-- **Joystick (optional)**: Used for movement.
-
 ## Installation
-Refer to the specific instructions provided in the source files or companion documentation for each platform to assemble and run Balloon Crazy on your system.
+
+To run this Flutter project, follow these steps:
+
+1. **Clone the repository**:
+   ```sh
+   git clone git@github.com:dcfrancisco/balloon_crazy.git
+   cd balloon_crazy
+   ```
+
+2. **Install dependencies:
+
+   ```sh
+
+3. **Run the app:
+   
+   ```sh
+   flutter run
+   ```
+
+## Source Code
+
+The original source code for Balloon Crazy, as typed in from the December 1985 issue of COMPUTE! magazine, is included in this repository. You can find the `BALLOON.BAS` file in the `assets` folder.
+
+- [BALLOON.BAS](assets/BALLOON.BAS)
 
 ## Source
 The original source code and detailed game description are from the December 1985 issue of COMPUTE! magazine. Here's the citation:
@@ -73,3 +70,7 @@ The original source code and detailed game description are from the December 198
 - Joseph Russ, "Balloon Crazy," COMPUTE! Magazine, Issue 67, December 1985. Available online at [AtariMagazines.com](https://www.atarimagazines.com/compute/issue67/305_1_BALLOON_CRAZY.php).
 
 Enjoy the delightful and challenging world of Balloon Crazy! Catch those balloons, score high, and become the ultimate Balloon Crazy champion!
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
