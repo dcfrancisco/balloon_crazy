@@ -42,7 +42,6 @@ class GameTitle extends PositionComponent {
               fontWeight: FontWeight.bold)), // Blue
     ];
 
-    // Create the title components
     final title = TextComponent(text: 'Balloon ', textRenderer: whitePaint);
     final crazyLetters = 'CRAZY!'.split('');
 
