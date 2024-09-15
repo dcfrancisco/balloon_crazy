@@ -18,9 +18,6 @@ class PlayArea extends RectangleComponent with HasGameReference<BalloonCrazy> {
   FutureOr<void> onLoad() async {
     super.onLoad();
 
-    // Center the play area in the portrait layout
-    size = Vector2(
-        gameWidth * 0.9, gameHeight * 0.8); // Slightly smaller than full screen
-    position = Vector2(gameWidth / 2, gameHeight / 2); // Centered in the screen
+    size = Vector2(gameWidth, gameHeight);
   }
 }
