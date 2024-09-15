@@ -54,9 +54,12 @@ To run this Flutter project, follow these steps:
    cd balloon_crazy
    ```
 
+
 2. **Install dependencies:
 
    ```sh
+   flutter pub get
+   ```
 
 3. **Run the app:
    
