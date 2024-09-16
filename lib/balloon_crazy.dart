@@ -1,13 +1,12 @@
 import 'dart:async';
 import 'dart:math' as math;
-import 'package:balloon_crazy/components/balloon.dart';
-import 'package:balloon_crazy/components/game_title.dart';
-import 'package:balloon_crazy/components/play_area.dart';
-import 'package:balloon_crazy/config.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+
+import 'package:balloon_crazy/components/components.dart';
+import 'package:balloon_crazy/config.dart';
 
 enum PlayState { welcome, playing, gameOver, won }
 
@@ -49,6 +48,11 @@ class BalloonCrazy extends FlameGame
     super.onLoad();
 
     camera.viewfinder.anchor = Anchor.topLeft;
+
+    world.add(PlayArea());
+
+    //playState = PlayState.welcome;
+
     debugMode = false;
   }
 
