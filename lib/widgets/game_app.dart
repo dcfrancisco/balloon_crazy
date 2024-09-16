@@ -1,10 +1,10 @@
-import 'package:balloon_crazy/balloon_crazy.dart'; // Assuming your game class is BalloonCrazy
-import 'package:balloon_crazy/config.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'overlay_screen.dart';
+import 'package:balloon_crazy/widgets/overlay_screen.dart';
+import 'package:balloon_crazy/balloon_crazy.dart';
+import 'package:balloon_crazy/config.dart';
 
 class GameApp extends StatefulWidget {
   const GameApp({super.key});
