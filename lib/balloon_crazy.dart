@@ -51,7 +51,7 @@ class BalloonCrazy extends FlameGame
 
     world.add(PlayArea());
 
-    //playState = PlayState.welcome;
+    // playState = PlayState.welcome;
 
     debugMode = false;
   }

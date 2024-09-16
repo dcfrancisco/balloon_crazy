@@ -1,3 +1,4 @@
+import 'package:balloon_crazy/widgets/score_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -51,6 +52,7 @@ class _GameAppState extends State<GameApp> {
               child: Center(
                 child: Column(
                   children: [
+                    ScoreCard(score: game.score),
                     Expanded(
                       child: FittedBox(
                         child: SizedBox(
