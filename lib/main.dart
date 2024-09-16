@@ -5,5 +5,7 @@ import 'package:balloon_crazy/balloon_crazy.dart';
 
 void main() {
   final game = BalloonCrazy();
-  runApp(GameWidget(game: game));
+  runApp(GameWidget(
+    game: game,
+  ));
 }
