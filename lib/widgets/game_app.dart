@@ -20,7 +20,7 @@ class _GameAppState extends State<GameApp> {
   @override
   void initState() {
     super.initState();
-    game = BalloonCrazy(); // Your game instance
+    game = BalloonCrazy();
   }
 
   @override

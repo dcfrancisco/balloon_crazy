@@ -6,10 +6,10 @@ class OverlayScreen extends StatelessWidget {
   final String subtitle;
 
   const OverlayScreen({
-    Key? key,
+    super.key,
     required this.title,
     required this.subtitle,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -6,7 +6,7 @@ import 'package:balloon_crazy/balloon_crazy.dart';
 class PlayArea extends RectangleComponent with HasGameReference<BalloonCrazy> {
   PlayArea()
       : super(
-          paint: Paint()..color = const Color.fromARGB(255, 87, 87, 247),
+          paint: Paint()..color = const Color(0xFF5757F7),
         );
 
   @override

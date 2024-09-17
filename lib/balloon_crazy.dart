@@ -51,9 +51,9 @@ class BalloonCrazy extends FlameGame
 
     world.add(PlayArea());
 
-    // playState = PlayState.welcome;
+    playState = PlayState.welcome;
 
-    debugMode = false;
+    debugMode = true;
   }
 
   void startGame() {
@@ -63,13 +63,11 @@ class BalloonCrazy extends FlameGame
     score.value = 0;
     playState = PlayState.playing;
 
-    // Define the play area
     final playArea = PlayArea();
     world.add(playArea);
 
-    // Position the game title
     final gameTitle = GameTitle();
-    gameTitle.position = Vector2(10, 45);
+    gameTitle.position = Vector2(50, 45);
     world.add(gameTitle);
 
     const rows = 4;
