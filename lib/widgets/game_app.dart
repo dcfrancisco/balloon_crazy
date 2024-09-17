@@ -57,8 +57,7 @@ class _GameAppState extends State<GameApp> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Padding(
-                          padding: EdgeInsets.only(
-                              left: 16.0), // Adjust the left margin as needed
+                          padding: EdgeInsets.only(left: 16.0),
                           child: GameTitle(),
                         ),
                         ScoreCard(score: game.score),
