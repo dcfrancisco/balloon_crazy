@@ -12,6 +12,8 @@ enum PlayState { welcome, playing, gameOver, won }
 
 class BalloonCrazy extends FlameGame
     with HasCollisionDetection, KeyboardEvents, TapDetector {
+  List<Balloon> bottomRowBalloons = [];
+
   BalloonCrazy()
       : super(
           camera: CameraComponent.withFixedResolution(
@@ -88,6 +90,9 @@ class BalloonCrazy extends FlameGame
           velocity: Vector2(0, 0),
         );
         world.add(balloon);
+        if (row == rows - 1) {
+          bottomRowBalloons.add(balloon);
+        }
       }
 
       const floorHeight = 150.0;
@@ -98,7 +103,35 @@ class BalloonCrazy extends FlameGame
         size: Vector2(size.x, floorHeight),
       );
       world.add(floor);
+
+      //  startDroppingBalloons();
     }
+  }
+
+  void dropBalloon() {
+    if (bottomRowBalloons.isNotEmpty) {
+      final random = math.Random();
+      final index = random.nextInt(bottomRowBalloons.length);
+      final balloon = bottomRowBalloons.removeAt(index);
+
+      balloon.velocity = Vector2(0, -100);
+    }
+  }
+
+  void startDroppingBalloons() {
+    final random = math.Random();
+
+    void dropBalloonAtRandomInterval() {
+      final interval = random.nextInt(10) + 1;
+      Timer(Duration(seconds: interval) as double, onTick: () {
+        dropBalloon();
+        if (bottomRowBalloons.isNotEmpty) {
+          dropBalloonAtRandomInterval();
+        }
+      });
+    }
+
+    dropBalloonAtRandomInterval();
   }
 
   @override

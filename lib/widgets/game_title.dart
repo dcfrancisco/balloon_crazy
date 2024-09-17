@@ -14,7 +14,7 @@ class GameTitle extends StatelessWidget {
           style: GoogleFonts.pressStart2p(
             textStyle: const TextStyle(
               color: Colors.white,
-              fontSize: 20,
+              fontSize: 15,
               fontWeight: FontWeight.bold,
             ),
           ),
