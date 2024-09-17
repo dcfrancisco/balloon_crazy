@@ -53,7 +53,7 @@ class BalloonCrazy extends FlameGame
 
     playState = PlayState.welcome;
 
-    debugMode = true;
+    debugMode = false;
   }
 
   void startGame() {
