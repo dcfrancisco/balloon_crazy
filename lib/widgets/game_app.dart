@@ -53,11 +53,17 @@ class _GameAppState extends State<GameApp> {
               child: Center(
                 child: Column(
                   children: [
-                    const Align(
-                      alignment: Alignment.topLeft,
-                      child: GameTitle(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(
+                              left: 16.0), // Adjust the left margin as needed
+                          child: GameTitle(),
+                        ),
+                        ScoreCard(score: game.score),
+                      ],
                     ),
-                    //const SizedBox(height: 16),
                     Expanded(
                       child: FittedBox(
                         child: SizedBox(

@@ -2,7 +2,7 @@
 
 **Balloon Crazy** is a whimsical and challenging game where players ride a skateboard to catch falling balloons on top of their head. Originally designed for Atari computers, this engaging game is now available for multiple platforms including Apple II, Commodore 64, IBM PC/PCjr, and TI-99/4A. This version is a modern adaptation built using Flutter.
 
-![Balloon Crazy](assets/305-1.png)
+![Balloon Crazy](assets/BalloonCrazy.png)
 
 ## Work in Progress
 
@@ -71,8 +71,7 @@ To run this Flutter project, follow these steps:
 
 The original source code for Balloon Crazy, as typed in from page 59 of the December 1985 issue of COMPUTE! magazine, is included in this repository. You can find the `BALLOON.BAS` file in the `assets` folder.
 
-- [BALLOON.BAS](assets/BALLOON.BAS)
-  - Version by Charles Brannon
+- [BALLOON.BAS](assets/BALLOON.BAS) version by Charles Brannon
 
 ## Source
 The original source code and detailed game description are from the December 1985 issue of COMPUTE! magazine. Here's the citation:
