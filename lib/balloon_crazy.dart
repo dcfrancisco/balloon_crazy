@@ -103,9 +103,9 @@ class BalloonCrazy extends FlameGame
         size: Vector2(size.x, floorHeight),
       );
       world.add(floor);
-    }
 
-    startDroppingBalloons();
+      //  startDroppingBalloons();
+    }
   }
 
   void dropBalloon() {
