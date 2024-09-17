@@ -89,6 +89,15 @@ class BalloonCrazy extends FlameGame
         );
         world.add(balloon);
       }
+
+      const floorHeight = 150.0;
+      final floorPositionY = size.y - floorHeight;
+
+      final floor = Floor(
+        position: Vector2(0, floorPositionY),
+        size: Vector2(size.x, floorHeight),
+      );
+      world.add(floor);
     }
   }
 
