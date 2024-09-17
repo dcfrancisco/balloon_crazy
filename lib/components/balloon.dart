@@ -1,4 +1,3 @@
-// Balloon Component (uses an image or sprite)
 import 'package:flame/components.dart';
 
 class Balloon extends SpriteComponent {

@@ -1,13 +1,12 @@
 import 'dart:async';
 import 'dart:math' as math;
-import 'package:balloon_crazy/components/balloon.dart';
-import 'package:balloon_crazy/components/game_title.dart';
-import 'package:balloon_crazy/components/play_area.dart';
-import 'package:balloon_crazy/config.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+
+import 'package:balloon_crazy/components/components.dart';
+import 'package:balloon_crazy/config.dart';
 
 enum PlayState { welcome, playing, gameOver, won }
 
@@ -49,7 +48,12 @@ class BalloonCrazy extends FlameGame
     super.onLoad();
 
     camera.viewfinder.anchor = Anchor.topLeft;
-    debugMode = false;
+
+    world.add(PlayArea());
+
+    playState = PlayState.welcome;
+
+    debugMode = true;
   }
 
   void startGame() {
@@ -59,14 +63,8 @@ class BalloonCrazy extends FlameGame
     score.value = 0;
     playState = PlayState.playing;
 
-    // Define the play area
     final playArea = PlayArea();
     world.add(playArea);
-
-    // Position the game title
-    final gameTitle = GameTitle();
-    gameTitle.position = Vector2(10, 45);
-    world.add(gameTitle);
 
     const rows = 4;
     const columns = 10;
@@ -78,8 +76,7 @@ class BalloonCrazy extends FlameGame
     final totalGridWidth = columns * (balloonSize.x + spacingX) - spacingX;
 
     final startX = ((gameWidth - totalGridWidth) / 2) + 20;
-    final startY = gameTitle.position.y + gameTitle.height + 250;
-
+    const startY = 100;
     for (int row = 0; row < rows; row++) {
       for (int col = 0; col < columns; col++) {
         final balloon = Balloon(

@@ -1,10 +1,11 @@
-import 'package:balloon_crazy/balloon_crazy.dart'; // Assuming your game class is BalloonCrazy
-import 'package:balloon_crazy/config.dart';
+import 'package:balloon_crazy/widgets/score_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'overlay_screen.dart';
+import 'package:balloon_crazy/widgets/overlay_screen.dart';
+import 'package:balloon_crazy/balloon_crazy.dart';
+import 'package:balloon_crazy/config.dart';
 
 class GameApp extends StatefulWidget {
   const GameApp({super.key});
@@ -19,7 +20,7 @@ class _GameAppState extends State<GameApp> {
   @override
   void initState() {
     super.initState();
-    game = BalloonCrazy(); // Your game instance
+    game = BalloonCrazy();
   }
 
   @override
@@ -40,8 +41,8 @@ class _GameAppState extends State<GameApp> {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Color(0xffa9d6e5),
-                Color(0xfff2e8cf),
+                Color.fromARGB(255, 30, 7, 134),
+                Color.fromARGB(255, 74, 82, 234),
               ],
             ),
           ),
@@ -51,6 +52,7 @@ class _GameAppState extends State<GameApp> {
               child: Center(
                 child: Column(
                   children: [
+                    ScoreCard(score: game.score),
                     Expanded(
                       child: FittedBox(
                         child: SizedBox(

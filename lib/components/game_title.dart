@@ -54,7 +54,7 @@ class GameTitle extends PositionComponent {
       xOffset += letter.size.x;
     }
 
-    position = Vector2((gameWidth * .05), 30);
+    position = Vector2((gameWidth * .052), 30);
     add(title);
   }
 }

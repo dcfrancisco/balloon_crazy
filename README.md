@@ -55,13 +55,13 @@ To run this Flutter project, follow these steps:
    ```
 
 
-2. **Install dependencies:
+2. **Install dependencies**:
 
    ```sh
    flutter pub get
    ```
 
-3. **Run the app:
+3. **Run the app**:
    
    ```sh
    flutter run

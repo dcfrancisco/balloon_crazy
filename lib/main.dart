@@ -1,11 +1,6 @@
-import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-
-import 'package:balloon_crazy/balloon_crazy.dart';
+import 'package:balloon_crazy/widgets/game_app.dart';
 
 void main() {
-  final game = BalloonCrazy();
-  runApp(GameWidget(
-    game: game,
-  ));
+  runApp(const GameApp());
 }
