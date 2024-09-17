@@ -4,6 +4,7 @@ import 'package:flame/game.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:balloon_crazy/widgets/overlay_screen.dart';
+import 'package:balloon_crazy/widgets/game_title.dart';
 import 'package:balloon_crazy/balloon_crazy.dart';
 import 'package:balloon_crazy/config.dart';
 
@@ -41,8 +42,8 @@ class _GameAppState extends State<GameApp> {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Color.fromARGB(255, 30, 7, 134),
-                Color.fromARGB(255, 74, 82, 234),
+                Color(0xff5555fa),
+                Color.fromARGB(255, 139, 139, 251),
               ],
             ),
           ),
@@ -52,7 +53,11 @@ class _GameAppState extends State<GameApp> {
               child: Center(
                 child: Column(
                   children: [
-                    ScoreCard(score: game.score),
+                    const Align(
+                      alignment: Alignment.topLeft,
+                      child: GameTitle(),
+                    ),
+                    //const SizedBox(height: 16),
                     Expanded(
                       child: FittedBox(
                         child: SizedBox(
