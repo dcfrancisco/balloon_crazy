@@ -12,7 +12,7 @@ enum PlayState { welcome, playing, gameOver, won }
 
 class BalloonCrazy extends FlameGame
     with HasCollisionDetection, KeyboardEvents, TapDetector {
-  List<Balloon> bottomRowBalloons = [];
+  List<List<Balloon>> columnsBalloons = [];
 
   BalloonCrazy()
       : super(
@@ -79,6 +79,9 @@ class BalloonCrazy extends FlameGame
 
     final startX = ((gameWidth - totalGridWidth) / 2) + 20;
     const startY = 100;
+
+    columnsBalloons = List.generate(columns, (_) => []);
+
     for (int row = 0; row < rows; row++) {
       for (int col = 0; col < columns; col++) {
         final balloon = Balloon(
@@ -90,9 +93,8 @@ class BalloonCrazy extends FlameGame
           velocity: Vector2(0, 0),
         );
         world.add(balloon);
-        if (row == rows - 1) {
-          bottomRowBalloons.add(balloon);
-        }
+
+        columnsBalloons[col].add(balloon);
       }
 
       const floorHeight = 150.0;
@@ -109,10 +111,11 @@ class BalloonCrazy extends FlameGame
   }
 
   void dropBalloon() {
-    if (bottomRowBalloons.isNotEmpty) {
-      final random = math.Random();
-      final index = random.nextInt(bottomRowBalloons.length);
-      final balloon = bottomRowBalloons.removeAt(index);
+    final random = math.Random();
+    final columnIndex = random.nextInt(columnsBalloons.length);
+
+    if (columnsBalloons.isNotEmpty) {
+      final balloon = columnsBalloons[columnIndex].removeLast();
 
       balloon.velocity = Vector2(0, -100);
     }
@@ -125,7 +128,7 @@ class BalloonCrazy extends FlameGame
       final interval = random.nextInt(10) + 1;
       Timer(Duration(seconds: interval) as double, onTick: () {
         dropBalloon();
-        if (bottomRowBalloons.isNotEmpty) {
+        if (columnsBalloons.isNotEmpty) {
           dropBalloonAtRandomInterval();
         }
       });
