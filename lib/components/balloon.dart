@@ -1,7 +1,7 @@
 import 'package:flame/components.dart';
 
 class Balloon extends SpriteComponent {
-  final Vector2 velocity;
+  late final Vector2 velocity;
 
   Balloon({
     required Vector2 position,
