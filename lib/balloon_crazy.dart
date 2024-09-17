@@ -91,8 +91,8 @@ class BalloonCrazy extends FlameGame
       }
 
       final floor = Floor(
-        position: Vector2(0, size.y - 50), // Adjust the position as needed
-        size: Vector2(size.x, 50), // Adjust the size as needed
+        position: Vector2(0, size.y - 50),
+        size: Vector2(size.x, 50),
       );
       add(floor);
     }
