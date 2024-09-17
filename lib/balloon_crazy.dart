@@ -121,17 +121,17 @@ class BalloonCrazy extends FlameGame
   void startDroppingBalloons() {
     final random = math.Random();
 
-    void dropBalloonAtRandom() {
+    void dropBalloonAtRandomInterval() {
       final interval = random.nextInt(10) + 1;
       Timer(Duration(seconds: interval) as double, onTick: () {
         dropBalloon();
         if (bottomRowBalloons.isNotEmpty) {
-          dropBalloonAtRandom();
+          dropBalloonAtRandomInterval();
         }
       });
     }
 
-    dropBalloonAtRandom();
+    dropBalloonAtRandomInterval();
   }
 
   @override
