@@ -125,7 +125,7 @@ class BalloonCrazy extends FlameGame
       final interval = random.nextInt(10) + 1;
       Timer(Duration(seconds: interval) as double, onTick: () {
         dropBalloon();
-        if (bottomRowBalloons.isEmpty) {
+        if (bottomRowBalloons.isNotEmpty) {
           dropBalloonAtRandom();
         }
       });
