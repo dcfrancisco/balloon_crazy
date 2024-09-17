@@ -41,8 +41,8 @@ class _GameAppState extends State<GameApp> {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Color(0xffa9d6e5),
-                Color(0xfff2e8cf),
+                Color.fromARGB(255, 30, 7, 134),
+                Color.fromARGB(255, 74, 82, 234),
               ],
             ),
           ),
