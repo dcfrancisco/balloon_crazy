@@ -1,19 +1,25 @@
-import 'dart:ui';
-
 import 'package:flame/components.dart';
 
 class Balloon extends SpriteComponent {
-  late final Vector2 velocity;
+  late Vector2 _velocity;
 
   Balloon({
     required Vector2 position,
     required Vector2 size,
-    required this.velocity,
+    required Vector2 velocity,
   }) : super(
           position: position,
           size: size,
           anchor: Anchor.center,
-        );
+        ) {
+    _velocity = velocity;
+  }
+
+  Vector2 get velocity => _velocity;
+
+  set velocity(Vector2 newVelocity) {
+    _velocity = newVelocity;
+  }
 
   @override
   Future<void> onLoad() async {
@@ -24,11 +30,6 @@ class Balloon extends SpriteComponent {
   @override
   void update(double dt) {
     super.update(dt);
-    position += velocity * dt;
-  }
-
-  @override
-  void setColor(Color color, {Object? paintId}) {
-    paint.color = color;
+    position += _velocity * dt;
   }
 }
