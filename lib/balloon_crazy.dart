@@ -101,7 +101,7 @@ class BalloonCrazy extends FlameGame
         balloonMatrix[col][row] = balloon;
       }
 
-      const floorHeight = 150.0;
+      const floorHeight = 200.0;
       final floorPositionY = size.y - floorHeight;
 
       final floor = Floor(
@@ -109,9 +109,9 @@ class BalloonCrazy extends FlameGame
         size: Vector2(size.x, floorHeight),
       );
       world.add(floor);
-    }
 
-    startDroppingBalloons();
+      startDroppingBalloons();
+    }
   }
 
   void dropBalloon() {
