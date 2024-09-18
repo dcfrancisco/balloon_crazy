@@ -1,4 +1,4 @@
-package com.example.balloon_crazy
+package ph.francisco.balloon_crazy
 
 import io.flutter.embedding.android.FlutterActivity
 
