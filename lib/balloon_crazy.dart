@@ -12,7 +12,7 @@ enum PlayState { welcome, playing, gameOver, won }
 
 class BalloonCrazy extends FlameGame
     with HasCollisionDetection, KeyboardEvents, TapDetector {
-  List<List<Balloon?>> balloonMatrix = []; // Matrix to store balloons
+  List<List<Balloon?>> balloonMatrix = [];
   late TimerComponent balloonDropTimer;
 
   BalloonCrazy()
