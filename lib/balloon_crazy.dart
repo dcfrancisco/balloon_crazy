@@ -13,7 +13,7 @@ enum PlayState { welcome, playing, gameOver, won }
 class BalloonCrazy extends FlameGame
     with HasCollisionDetection, KeyboardEvents, TapDetector {
   List<List<Balloon?>> balloonMatrix = []; // Matrix to store balloons
-  late Timer balloonDropTimer;
+  late TimerComponent balloonDropTimer;
 
   BalloonCrazy()
       : super(
@@ -139,12 +139,12 @@ class BalloonCrazy extends FlameGame
         dropBalloon();
         if (balloonMatrix
             .every((column) => column.every((balloon) => balloon == null))) {
-          (balloonDropTimer as TimerComponent).removeFromParent();
+          balloonDropTimer.removeFromParent();
           playState = PlayState.won;
         }
       },
-    ) as Timer;
-    add(balloonDropTimer as Component);
+    );
+    add(balloonDropTimer);
   }
 
   @override
