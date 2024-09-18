@@ -12,7 +12,8 @@ enum PlayState { welcome, playing, gameOver, won }
 
 class BalloonCrazy extends FlameGame
     with HasCollisionDetection, KeyboardEvents, TapDetector {
-  List<List<Balloon>> columnsBalloons = [];
+  List<List<Balloon?>> balloonMatrix = []; // Matrix to store balloons
+  late Timer balloonDropTimer;
 
   BalloonCrazy()
       : super(
@@ -80,7 +81,10 @@ class BalloonCrazy extends FlameGame
     final startX = ((gameWidth - totalGridWidth) / 2) + 20;
     const startY = 100;
 
-    columnsBalloons = List.generate(columns, (_) => []);
+    balloonMatrix = List.generate(
+      columns,
+      (col) => List<Balloon?>.filled(rows, null),
+    );
 
     for (int row = 0; row < rows; row++) {
       for (int col = 0; col < columns; col++) {
@@ -94,7 +98,7 @@ class BalloonCrazy extends FlameGame
         );
         world.add(balloon);
 
-        columnsBalloons[col].add(balloon);
+        balloonMatrix[col][row] = balloon;
       }
 
       const floorHeight = 150.0;
@@ -105,42 +109,50 @@ class BalloonCrazy extends FlameGame
         size: Vector2(size.x, floorHeight),
       );
       world.add(floor);
-
-      // startDroppingBalloons();
     }
+
+    startDroppingBalloons();
   }
 
   void dropBalloon() {
     final random = math.Random();
-    final columnIndex = random.nextInt(columnsBalloons.length);
+    final columnIndex = random.nextInt(balloonMatrix.length);
 
-    if (columnsBalloons.isNotEmpty) {
-      final balloon = columnsBalloons[columnIndex].removeLast();
-
-      balloon.velocity = Vector2(0, -100);
+    for (int row = balloonMatrix[columnIndex].length - 1; row >= 0; row--) {
+      final balloon = balloonMatrix[columnIndex][row];
+      if (balloon != null && balloon.velocity == Vector2.zero()) {
+        balloon.velocity = Vector2(0, 100);
+        balloonMatrix[columnIndex][row] = null;
+        break;
+      }
     }
   }
 
   void startDroppingBalloons() {
-    final random = math.Random();
+    if (playState != PlayState.playing) return;
 
-    void dropBalloonAtRandomInterval() {
-      final interval = random.nextInt(10) + 1;
-      Timer(Duration(seconds: interval) as double, onTick: () {
+    final randomInterval = rand.nextDouble() * 3 + 1;
+    balloonDropTimer = TimerComponent(
+      period: randomInterval,
+      repeat: true,
+      onTick: () {
         dropBalloon();
-        if (columnsBalloons.isNotEmpty) {
-          dropBalloonAtRandomInterval();
+        if (balloonMatrix
+            .every((column) => column.every((balloon) => balloon == null))) {
+          (balloonDropTimer as TimerComponent).removeFromParent();
+          playState = PlayState.won;
         }
-      });
-    }
-
-    dropBalloonAtRandomInterval();
+      },
+    ) as Timer;
+    add(balloonDropTimer as Component);
   }
 
   @override
   void onTap() {
     super.onTap();
-    startGame();
+    if (playState != PlayState.playing) {
+      startGame();
+    }
   }
 
   @override
