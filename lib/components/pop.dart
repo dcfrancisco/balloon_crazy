@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 class Pop extends StatefulWidget {
+  const Pop({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _PopState createState() => _PopState();
 }
 

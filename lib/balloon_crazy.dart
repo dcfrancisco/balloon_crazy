@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:balloon_crazy/components/components.dart';
@@ -105,16 +106,16 @@ class BalloonCrazy extends FlameGame
         size: Vector2(size.x, floorHeight),
       );
       world.add(floor);
-
-      // startDroppingBalloons();
     }
+
+    startDroppingBalloons();
   }
 
   void dropBalloon() {
     final random = math.Random();
     final columnIndex = random.nextInt(columnsBalloons.length);
 
-    if (columnsBalloons.isNotEmpty) {
+    if (columnsBalloons[columnIndex].isNotEmpty) {
       final balloon = columnsBalloons[columnIndex].removeLast();
 
       balloon.velocity = Vector2(0, -100);
@@ -125,10 +126,10 @@ class BalloonCrazy extends FlameGame
     final random = math.Random();
 
     void dropBalloonAtRandomInterval() {
-      final interval = random.nextInt(10) + 1;
+      final interval = random.nextInt(4) + 1;
       Timer(Duration(seconds: interval) as double, onTick: () {
         dropBalloon();
-        if (columnsBalloons.isNotEmpty) {
+        if (columnsBalloons.any((column) => column.isNotEmpty)) {
           dropBalloonAtRandomInterval();
         }
       });
