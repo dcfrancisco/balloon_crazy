@@ -18,7 +18,7 @@ class Pop extends SpriteAnimationComponent {
   Future<void> onLoad() async {
     super.onLoad();
     images = Images();
-    final spriteSheet = await images.load('pop_sprite_sheet.png');
+    final spriteSheet = await images.load('balloon_pop.png');
     final spriteSize = Vector2(32, 32); // Assuming each frame is 32x32 pixels
     final spriteSheetData = SpriteSheet(
       image: spriteSheet,
