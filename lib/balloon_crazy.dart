@@ -111,27 +111,6 @@ class BalloonCrazy extends FlameGame
       world.add(floor);
 
       startDroppingBalloons();
-      //dropOneBalloon();
-    }
-  }
-
-  void dropOneBalloon() {
-    final random = math.Random();
-    final columnIndex = random.nextInt(balloonMatrix.length);
-    print('Selected column: $columnIndex');
-
-    for (int row = balloonMatrix[columnIndex].length - 1; row >= 0; row--) {
-      final balloon = balloonMatrix[columnIndex][row];
-      if (balloon != null) {
-        print(
-            'Found balloon at column $columnIndex, row $row with velocity ${balloon.velocity}');
-        if (balloon.velocity == Vector2.zero()) {
-          print('Dropping balloon at column $columnIndex, row $row');
-          balloon.velocity = Vector2(0, 100);
-          balloonMatrix[columnIndex][row] = null;
-          break;
-        }
-      }
     }
   }
 
@@ -141,7 +120,6 @@ class BalloonCrazy extends FlameGame
 
     for (int row = balloonMatrix[columnIndex].length - 1; row >= 0; row--) {
       final balloon = balloonMatrix[columnIndex][row];
-      //  balloon?.setColor(Colors.green);
       if (balloon != null && balloon.velocity == Vector2.zero()) {
         balloon.velocity = Vector2(0, 100);
         balloonMatrix[columnIndex][row] = null;
