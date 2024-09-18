@@ -120,6 +120,7 @@ class BalloonCrazy extends FlameGame
 
     for (int row = balloonMatrix[columnIndex].length - 1; row >= 0; row--) {
       final balloon = balloonMatrix[columnIndex][row];
+      balloon?.setColor(Colors.green);
       if (balloon != null && balloon.velocity == Vector2.zero()) {
         balloon.velocity = Vector2(0, 100);
         balloonMatrix[columnIndex][row] = null;

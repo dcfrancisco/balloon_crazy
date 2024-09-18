@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flame/components.dart';
 
 class Balloon extends SpriteComponent {
@@ -23,5 +25,10 @@ class Balloon extends SpriteComponent {
   void update(double dt) {
     super.update(dt);
     position += velocity * dt;
+  }
+
+  @override
+  void setColor(Color color, {Object? paintId}) {
+    paint.color = color;
   }
 }
