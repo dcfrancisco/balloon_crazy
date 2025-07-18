@@ -2,6 +2,10 @@
 
 **Balloon Crazy** is a whimsical and challenging game where players ride a skateboard to catch falling balloons on top of their head. Originally designed for Atari computers, this engaging game is now available for multiple platforms including Apple II, Commodore 64, IBM PC/PCjr, and TI-99/4A. This version is a modern adaptation built using Flutter.
 
+
+> ☕️ If this helps you learn faster, [buy me a coffee](https://www.buymeacoffee.com/dcfrancisco) 🙌
+
+
 ![Balloon Crazy](assets/BalloonCrazy.png)
 
 ## Work in Progress
