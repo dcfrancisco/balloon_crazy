@@ -12,16 +12,17 @@ enum PlayState { welcome, playing, gameOver, won }
 
 class BalloonCrazy extends FlameGame
     with HasCollisionDetection, KeyboardEvents, TapDetector {
+  late final Player player;
   List<List<Balloon?>> balloonMatrix = [];
   late TimerComponent balloonDropTimer;
 
   BalloonCrazy()
-      : super(
-          camera: CameraComponent.withFixedResolution(
-            width: gameWidth,
-            height: gameHeight,
-          ),
-        );
+    : super(
+        camera: CameraComponent.withFixedResolution(
+          width: gameWidth,
+          height: gameHeight,
+        ),
+      );
 
   final ValueNotifier<int> score = ValueNotifier<int>(0);
   final rand = math.Random();
@@ -53,6 +54,11 @@ class BalloonCrazy extends FlameGame
     camera.viewfinder.anchor = Anchor.topLeft;
 
     world.add(PlayArea());
+    player = Player(
+      position: Vector2(width / 2, height - 30),
+      size: Vector2(50, 50),
+    );
+    world.add(player);
 
     playState = PlayState.welcome;
 
@@ -137,8 +143,9 @@ class BalloonCrazy extends FlameGame
       repeat: true,
       onTick: () {
         dropBalloon();
-        if (balloonMatrix
-            .every((column) => column.every((balloon) => balloon == null))) {
+        if (balloonMatrix.every(
+          (column) => column.every((balloon) => balloon == null),
+        )) {
           balloonDropTimer.removeFromParent();
           playState = PlayState.won;
         }
