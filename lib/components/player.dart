@@ -35,10 +35,8 @@ class Player extends SpriteComponent
       // Smoothly move towards target position
       final dx = targetX - position.x;
       if (dx.abs() > 1) {
-        final movement = dx.sign * moveSpeed * dt;
-        position.x += movement;
+        position.x += dx.sign * moveSpeed * dt;
         position.x = position.x.clamp(size.x / 2, gameWidth - size.x / 2);
-        print('Player moving: dx=$dx, movement=$movement, newX=${position.x}');
       }
     }
   }

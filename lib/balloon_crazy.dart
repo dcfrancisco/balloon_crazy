@@ -176,36 +176,30 @@ class BalloonCrazy extends FlameGame
   @override
   void onPanUpdate(DragUpdateInfo info) {
     if (playState == PlayState.playing) {
-      // Try using widget coordinates directly since camera is fixed resolution
-      final gamePos = info.eventPosition.widget;
-      player.targetX = gamePos.x;
-      print(
-        'Pan Update: targetX set to ${gamePos.x}, player at ${player.position.x}',
-      );
+      // Scale screen coordinates to game coordinates
+      final screenX = info.eventPosition.widget.x;
+      final scaleX = gameWidth / canvasSize.x;
+      player.targetX = screenX * scaleX;
     }
   }
 
   @override
   void onPanStart(DragStartInfo info) {
     if (playState == PlayState.playing) {
-      // Try using widget coordinates directly since camera is fixed resolution
-      final gamePos = info.eventPosition.widget;
-      player.targetX = gamePos.x;
-      print(
-        'Pan Start: targetX set to ${gamePos.x}, player at ${player.position.x}',
-      );
+      // Scale screen coordinates to game coordinates
+      final screenX = info.eventPosition.widget.x;
+      final scaleX = gameWidth / canvasSize.x;
+      player.targetX = screenX * scaleX;
     }
   }
 
   @override
   void onTapDown(TapDownInfo info) {
     if (playState == PlayState.playing) {
-      // Try using widget coordinates directly since camera is fixed resolution
-      final gamePos = info.eventPosition.widget;
-      player.targetX = gamePos.x;
-      print(
-        'Tap Down: targetX set to ${gamePos.x}, player at ${player.position.x}',
-      );
+      // Scale screen coordinates to game coordinates
+      final screenX = info.eventPosition.widget.x;
+      final scaleX = gameWidth / canvasSize.x;
+      player.targetX = screenX * scaleX;
     }
   }
 
