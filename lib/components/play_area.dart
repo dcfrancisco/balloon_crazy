@@ -7,6 +7,7 @@ import 'package:balloon_crazy/config.dart';
 
 class PlayArea extends RectangleComponent with HasGameReference<BalloonCrazy> {
   late Player player;
+  late Floor floor;
 
   PlayArea() : super(paint: Paint()..color = const Color(0xFF5757F7));
 
@@ -18,22 +19,21 @@ class PlayArea extends RectangleComponent with HasGameReference<BalloonCrazy> {
     const floorHeight = 200.0;
     final floorPositionY = gameHeight - floorHeight;
 
+    // Create player and floor but don't add them here
+    // They'll be added directly to world
     player = Player(
       position: Vector2(gameWidth / 2, floorPositionY - 50),
       size: Vector2(80, 100),
     );
     player.opacity = 0; // Hide player initially
-    add(player);
 
-    final floor = Floor(
+    floor = Floor(
       position: Vector2(0, floorPositionY),
       size: Vector2(gameWidth, floorHeight),
     );
-    add(floor);
   }
 
   void resetGame() {
-    removeAll(children.query<Balloon>());
     player.reset();
     player.opacity = 1; // Show player when game starts
   }

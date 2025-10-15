@@ -15,13 +15,8 @@ class BalloonCrazy extends FlameGame
   late final Player player;
   late PlayArea playArea;
 
-  // Row-based balloon system (like original BP=0 to BP=3)
-  List<List<Balloon>> balloonRows = [];
-  int currentRow = 3; // Start from top row (BP=3 in original)
-  Balloon? fallingBalloon;
-  double balloonSpeed = 100.0; // Base speed (SP! in original)
-  final double baseSpeed = 100.0;
-
+  // Column-based balloon system (simpler, works better)
+  List<List<Balloon?>> balloonMatrix = [];
   late TimerComponent balloonDropTimer;
 
   BalloonCrazy()
@@ -64,7 +59,14 @@ class BalloonCrazy extends FlameGame
 
     playArea = PlayArea();
     world.add(playArea);
+
+    // Wait for playArea to initialize
+    await playArea.loaded;
+
+    // Add player and floor directly to world (same level as balloons)
     player = playArea.player;
+    world.add(player);
+    world.add(playArea.floor);
 
     playState = PlayState.welcome;
 
@@ -74,112 +76,93 @@ class BalloonCrazy extends FlameGame
   void startGame() {
     if (playState == PlayState.playing) return;
 
+    // Remove any existing balloons
+    world.removeAll(world.children.query<Balloon>());
+
     playArea.resetGame();
     score.value = 0;
     lives.value = 4;
-    currentRow = 3;
-    balloonSpeed = baseSpeed;
-    fallingBalloon = null;
     playState = PlayState.playing;
 
     const rows = 4;
-    const columns = 15; // Original has 15 balloons per row
+    const columns = 10;
 
-    final balloonSize = Vector2(45, 45);
-    const spacingX = 15.0;
+    final balloonSize = Vector2(55, 55);
+    const spacingX = 20.0;
     const spacingY = 20.0;
 
     final totalGridWidth = columns * (balloonSize.x + spacingX) - spacingX;
-    final startX = ((gameWidth - totalGridWidth) / 2);
-    const startY = 80.0;
+    final startX = ((gameWidth - totalGridWidth) / 2) + 20;
+    const startY = 100;
 
-    // Create 4 rows of balloons (top to bottom = rows 3,2,1,0)
-    balloonRows = List.generate(rows, (rowIndex) {
-      List<Balloon> row = [];
+    balloonMatrix = List.generate(
+      columns,
+      (col) => List<Balloon?>.filled(rows, null),
+    );
+
+    for (int row = 0; row < rows; row++) {
       for (int col = 0; col < columns; col++) {
         final balloon = Balloon(
           position: Vector2(
             startX + col * (balloonSize.x + spacingX),
-            startY + (3 - rowIndex) * (balloonSize.y + spacingY),
+            startY + row * (balloonSize.y + spacingY),
           ),
           size: balloonSize,
           velocity: Vector2(0, 0),
-          rowIndex: rowIndex,
+          rowIndex: row,
           columnIndex: col,
         );
         world.add(balloon);
-        row.add(balloon);
+        balloonMatrix[col][row] = balloon;
       }
-      return row;
-    });
+    }
 
     startDroppingBalloons();
   }
 
   void dropBalloon() {
-    // If a balloon is already falling, don't drop another (one at a time!)
-    if (fallingBalloon != null && !fallingBalloon!.isMounted) {
-      fallingBalloon = null;
+    final columnIndex = rand.nextInt(balloonMatrix.length);
+
+    for (int row = balloonMatrix[columnIndex].length - 1; row >= 0; row--) {
+      final balloon = balloonMatrix[columnIndex][row];
+      if (balloon != null && balloon.velocity == Vector2.zero()) {
+        balloon.velocity = Vector2(0, 100);
+        balloonMatrix[columnIndex][row] = null;
+        break;
+      }
     }
-    if (fallingBalloon != null) return;
-
-    // Find current active row
-    while (currentRow >= 0 && balloonRows[currentRow].isEmpty) {
-      currentRow--; // Move to next row (BP = BP - 1 in original)
-    }
-
-    // Check if all balloons are gone (win condition)
-    if (currentRow < 0) {
-      balloonDropTimer.removeFromParent();
-      playState = PlayState.won;
-      return;
-    }
-
-    // Pick random balloon from current row
-    final availableBalloons = balloonRows[currentRow];
-    if (availableBalloons.isEmpty) return;
-
-    final randomIndex = rand.nextInt(availableBalloons.length);
-    final balloon = availableBalloons[randomIndex];
-
-    // Remove from row list
-    balloonRows[currentRow].removeAt(randomIndex);
-
-    // Start balloon falling at current speed
-    balloon.velocity = Vector2(0, balloonSpeed);
-    fallingBalloon = balloon;
   }
 
   void startDroppingBalloons() {
     if (playState != PlayState.playing) return;
 
-    // Drop balloons more frequently than original (for better mobile gameplay)
+    final randomInterval = rand.nextDouble() * 2 + 1;
     balloonDropTimer = TimerComponent(
-      period: 1.5,
+      period: randomInterval,
       repeat: true,
-      onTick: dropBalloon,
+      onTick: () {
+        dropBalloon();
+        if (balloonMatrix.every(
+          (column) => column.every((balloon) => balloon == null),
+        )) {
+          balloonDropTimer.removeFromParent();
+          playState = PlayState.won;
+        }
+      },
     );
     add(balloonDropTimer);
   }
 
   void onBalloonCaught(Balloon balloon) {
-    if (balloon == fallingBalloon) {
-      fallingBalloon = null;
+    // Remove balloon from matrix
+    for (int col = 0; col < balloonMatrix.length; col++) {
+      for (int row = 0; row < balloonMatrix[col].length; row++) {
+        if (balloonMatrix[col][row] == balloon) {
+          balloonMatrix[col][row] = null;
+          break;
+        }
+      }
     }
-
-    // Increase speed with each catch (SP! = SP! + 0.5 in original)
-    balloonSpeed += 12.5; // Scaled for our speed units
-  }
-
-  void resetBalloonSpeed() {
-    // Reset speed on banking (SP! = 4 in original)
-    balloonSpeed = baseSpeed;
-  }
-
-  int getBalloonsNeededForBanking() {
-    // Dynamic banking: 7 - BP (row number)
-    // Row 3: need 4, Row 2: need 5, Row 1: need 6, Row 0: need 7
-    return 7 - currentRow;
   }
 
   @override
@@ -193,29 +176,46 @@ class BalloonCrazy extends FlameGame
   @override
   void onPanUpdate(DragUpdateInfo info) {
     if (playState == PlayState.playing) {
-      player.targetX = info.eventPosition.global.x;
+      // Try using widget coordinates directly since camera is fixed resolution
+      final gamePos = info.eventPosition.widget;
+      player.targetX = gamePos.x;
+      print(
+        'Pan Update: targetX set to ${gamePos.x}, player at ${player.position.x}',
+      );
     }
   }
 
   @override
   void onPanStart(DragStartInfo info) {
     if (playState == PlayState.playing) {
-      player.targetX = info.eventPosition.global.x;
+      // Try using widget coordinates directly since camera is fixed resolution
+      final gamePos = info.eventPosition.widget;
+      player.targetX = gamePos.x;
+      print(
+        'Pan Start: targetX set to ${gamePos.x}, player at ${player.position.x}',
+      );
+    }
+  }
+
+  @override
+  void onTapDown(TapDownInfo info) {
+    if (playState == PlayState.playing) {
+      // Try using widget coordinates directly since camera is fixed resolution
+      final gamePos = info.eventPosition.widget;
+      player.targetX = gamePos.x;
+      print(
+        'Tap Down: targetX set to ${gamePos.x}, player at ${player.position.x}',
+      );
     }
   }
 
   void onLoseLife() {
-    // Pop all held balloons when losing a life
-    player.popAllBalloons();
-
     lives.value--;
     if (lives.value <= 0) {
       playState = PlayState.gameOver;
+      balloonDropTimer.removeFromParent();
     } else {
-      // Reset for next life
       player.reset();
-      balloonSpeed = baseSpeed;
-      fallingBalloon = null;
     }
   }
 
