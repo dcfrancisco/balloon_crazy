@@ -73,9 +73,11 @@ class _GameAppState extends State<GameApp> {
                                     behavior: HitTestBehavior.opaque,
                                     onTap: () =>
                                         (game as BalloonCrazy).startGame(),
-                                    child: const OverlayScreen(
-                                      title: 'TAP TO PLAY',
-                                      subtitle: 'Use arrow keys or swipe',
+                                    child: const SizedBox.expand(
+                                      child: OverlayScreen(
+                                        title: 'TAP TO PLAY',
+                                        subtitle: 'Use arrow keys or swipe',
+                                      ),
                                     ),
                                   ),
                               PlayState.gameOver.name: (context, game) =>
@@ -83,9 +85,11 @@ class _GameAppState extends State<GameApp> {
                                     behavior: HitTestBehavior.opaque,
                                     onTap: () =>
                                         (game as BalloonCrazy).startGame(),
-                                    child: const OverlayScreen(
-                                      title: 'G A M E   O V E R',
-                                      subtitle: 'Tap to Play Again',
+                                    child: const SizedBox.expand(
+                                      child: OverlayScreen(
+                                        title: 'G A M E   O V E R',
+                                        subtitle: 'Tap to Play Again',
+                                      ),
                                     ),
                                   ),
                               PlayState.won.name: (context, game) =>
@@ -93,9 +97,11 @@ class _GameAppState extends State<GameApp> {
                                     behavior: HitTestBehavior.opaque,
                                     onTap: () =>
                                         (game as BalloonCrazy).startGame(),
-                                    child: const OverlayScreen(
-                                      title: 'Y O U   W O N ! ! !',
-                                      subtitle: 'Tap to Play Again',
+                                    child: const SizedBox.expand(
+                                      child: OverlayScreen(
+                                        title: 'Y O U   W O N ! ! !',
+                                        subtitle: 'Tap to Play Again',
+                                      ),
                                     ),
                                   ),
                             },
