@@ -184,7 +184,12 @@ class BalloonCrazy extends FlameGame
       final worldPos = camera.viewfinder.globalToLocal(
         info.eventPosition.global,
       );
-      player.targetX = worldPos.x;
+      // Immediate movement: set player position directly to follow finger
+      final minX = player.size.x / 2;
+      final maxX = gameWidth - player.size.x / 2;
+      final newX = (worldPos.x).clamp(minX, maxX);
+      player.targetX = newX;
+      player.position.x = newX;
     }
   }
 
@@ -194,7 +199,9 @@ class BalloonCrazy extends FlameGame
       final worldPos = camera.viewfinder.globalToLocal(
         info.eventPosition.global,
       );
+      // immediate set to test movement responsiveness
       player.targetX = worldPos.x;
+      player.position.x = worldPos.x;
     }
   }
 
@@ -204,7 +211,9 @@ class BalloonCrazy extends FlameGame
       final worldPos = camera.viewfinder.globalToLocal(
         info.eventPosition.global,
       );
+      // immediate set when tapping
       player.targetX = worldPos.x;
+      player.position.x = worldPos.x;
     }
   }
 
