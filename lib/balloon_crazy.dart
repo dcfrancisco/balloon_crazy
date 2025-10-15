@@ -15,7 +15,6 @@ class BalloonCrazy extends FlameGame
   late final Player player;
   late PlayArea playArea;
 
-  // Column-based balloon system (simpler, works better)
   List<List<Balloon?>> balloonMatrix = [];
   late TimerComponent balloonDropTimer;
 
@@ -32,6 +31,10 @@ class BalloonCrazy extends FlameGame
   final rand = math.Random();
   double get width => size.x;
   double get height => size.y;
+  double? lastWorldX;
+  double? lastWidgetX;
+  double widgetRenderWidth = 0.0;
+  double widgetRenderHeight = 0.0;
 
   late PlayState _playState = PlayState.welcome;
   PlayState get playState => _playState;
@@ -68,9 +71,7 @@ class BalloonCrazy extends FlameGame
     world.add(player);
     world.add(playArea.floor);
 
-    // Add debug HUD for on-device debugging
-    final debugHud = DebugHud();
-    world.add(debugHud);
+    // Debug HUD removed per user request
 
     playState = PlayState.welcome;
 
@@ -80,24 +81,22 @@ class BalloonCrazy extends FlameGame
   void startGame() {
     if (playState == PlayState.playing) return;
 
-    // Remove any existing balloons
     world.removeAll(world.children.query<Balloon>());
 
     playArea.resetGame();
     score.value = 0;
-    lives.value = 4;
+    lives.value = initialLives;
     playState = PlayState.playing;
+    final rows = gridRows;
+    final columns = gridColumns;
 
-    const rows = 4;
-    const columns = 10;
-
-    final balloonSize = Vector2(55, 55);
-    const spacingX = 20.0;
-    const spacingY = 20.0;
+    final balloonSize = Vector2(balloonWidth, balloonHeight);
+    final spacingX = horizontalSpacing;
+    final spacingY = verticalSpacing;
 
     final totalGridWidth = columns * (balloonSize.x + spacingX) - spacingX;
-    final startX = ((gameWidth - totalGridWidth) / 2) + 20;
-    const startY = 100;
+    final startX = ((gameWidth - totalGridWidth) / 2) + gridStartMargin;
+    final startY = gridStartY;
 
     balloonMatrix = List.generate(
       columns,
@@ -130,7 +129,7 @@ class BalloonCrazy extends FlameGame
     for (int row = balloonMatrix[columnIndex].length - 1; row >= 0; row--) {
       final balloon = balloonMatrix[columnIndex][row];
       if (balloon != null && balloon.velocity == Vector2.zero()) {
-        balloon.velocity = Vector2(0, 100);
+        balloon.velocity = Vector2(0, balloonDropSpeed);
         balloonMatrix[columnIndex][row] = null;
         break;
       }
@@ -180,14 +179,31 @@ class BalloonCrazy extends FlameGame
   @override
   void onPanUpdate(DragUpdateInfo info) {
     if (playState == PlayState.playing) {
-      // Map screen/global coordinates to game world using the camera
-      final worldPos = camera.viewfinder.globalToLocal(
-        info.eventPosition.global,
-      );
+      // store widget-x for diagnostics
+      final widgetX = info.eventPosition.widget.x;
+      lastWidgetX = widgetX;
+
+      // If we know the rendered GameWidget width, compute a proportional
+      // mapping from widget X -> world X so touches map across the full
+      // gameWidth regardless of layout scaling (FittedBox, etc.).
+      double worldX;
+      if (widgetRenderWidth > 0) {
+        final ratio = (widgetX / widgetRenderWidth).clamp(0.0, 1.0);
+        worldX = ratio * gameWidth;
+      } else {
+        // Fallback to camera mapping if render size isn't available yet.
+        final worldPos = camera.viewfinder.globalToLocal(
+          info.eventPosition.global,
+        );
+        worldX = worldPos.x;
+      }
+
+      lastWorldX = worldX;
+
       // Immediate movement: set player position directly to follow finger
       final minX = player.size.x / 2;
       final maxX = gameWidth - player.size.x / 2;
-      final newX = (worldPos.x).clamp(minX, maxX);
+      final newX = worldX.clamp(minX, maxX);
       player.targetX = newX;
       player.position.x = newX;
     }
@@ -196,24 +212,48 @@ class BalloonCrazy extends FlameGame
   @override
   void onPanStart(DragStartInfo info) {
     if (playState == PlayState.playing) {
-      final worldPos = camera.viewfinder.globalToLocal(
-        info.eventPosition.global,
-      );
+      final widgetX = info.eventPosition.widget.x;
+      lastWidgetX = widgetX;
+
+      double worldX;
+      if (widgetRenderWidth > 0) {
+        final ratio = (widgetX / widgetRenderWidth).clamp(0.0, 1.0);
+        worldX = ratio * gameWidth;
+      } else {
+        final worldPos = camera.viewfinder.globalToLocal(
+          info.eventPosition.global,
+        );
+        worldX = worldPos.x;
+      }
+
+      lastWorldX = worldX;
       // immediate set to test movement responsiveness
-      player.targetX = worldPos.x;
-      player.position.x = worldPos.x;
+      player.targetX = worldX;
+      player.position.x = worldX;
     }
   }
 
   @override
   void onTapDown(TapDownInfo info) {
     if (playState == PlayState.playing) {
-      final worldPos = camera.viewfinder.globalToLocal(
-        info.eventPosition.global,
-      );
+      final widgetX = info.eventPosition.widget.x;
+      lastWidgetX = widgetX;
+
+      double worldX;
+      if (widgetRenderWidth > 0) {
+        final ratio = (widgetX / widgetRenderWidth).clamp(0.0, 1.0);
+        worldX = ratio * gameWidth;
+      } else {
+        final worldPos = camera.viewfinder.globalToLocal(
+          info.eventPosition.global,
+        );
+        worldX = worldPos.x;
+      }
+
+      lastWorldX = worldX;
       // immediate set when tapping
-      player.targetX = worldPos.x;
-      player.position.x = worldPos.x;
+      player.targetX = worldX;
+      player.position.x = worldX;
     }
   }
 

@@ -26,6 +26,13 @@ class DebugHud extends TextComponent with HasGameReference<BalloonCrazy> {
     final state = game.playState;
     final playerX = p.position.x.toStringAsFixed(1);
     final targetX = p.targetX.toStringAsFixed(1);
-    text = 'state: $state\nplayerX: $playerX\ntargetX: $targetX';
+    final worldX = (game.lastWorldX != null)
+        ? game.lastWorldX!.toStringAsFixed(1)
+        : 'null';
+    final widgetX = (game.lastWidgetX != null)
+        ? game.lastWidgetX!.toStringAsFixed(1)
+        : 'null';
+    text =
+        'state: $state\nplayerX: $playerX\ntargetX: $targetX\nworldX: $worldX\nwidgetX: $widgetX';
   }
 }

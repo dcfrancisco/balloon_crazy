@@ -65,45 +65,54 @@ class _GameAppState extends State<GameApp> {
                         child: SizedBox(
                           width: gameWidth,
                           height: gameHeight,
-                          child: GameWidget(
-                            game: game,
-                            overlayBuilderMap: {
-                              PlayState.welcome.name: (context, game) =>
-                                  GestureDetector(
-                                    behavior: HitTestBehavior.opaque,
-                                    onTap: () =>
-                                        (game as BalloonCrazy).startGame(),
-                                    child: const SizedBox.expand(
-                                      child: OverlayScreen(
-                                        title: 'TAP TO PLAY',
-                                        subtitle: 'Use arrow keys or swipe',
+                          child: LayoutBuilder(
+                            builder: (context, constraints) {
+                              // Provide the actual rendered size back to the game
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                game.widgetRenderWidth = constraints.maxWidth;
+                                game.widgetRenderHeight = constraints.maxHeight;
+                              });
+                              return GameWidget(
+                                game: game,
+                                overlayBuilderMap: {
+                                  PlayState.welcome.name: (context, game) =>
+                                      GestureDetector(
+                                        behavior: HitTestBehavior.opaque,
+                                        onTap: () =>
+                                            (game as BalloonCrazy).startGame(),
+                                        child: const SizedBox.expand(
+                                          child: OverlayScreen(
+                                            title: 'TAP TO PLAY',
+                                            subtitle: 'Use arrow keys or swipe',
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                              PlayState.gameOver.name: (context, game) =>
-                                  GestureDetector(
-                                    behavior: HitTestBehavior.opaque,
-                                    onTap: () =>
-                                        (game as BalloonCrazy).startGame(),
-                                    child: const SizedBox.expand(
-                                      child: OverlayScreen(
-                                        title: 'G A M E   O V E R',
-                                        subtitle: 'Tap to Play Again',
+                                  PlayState.gameOver.name: (context, game) =>
+                                      GestureDetector(
+                                        behavior: HitTestBehavior.opaque,
+                                        onTap: () =>
+                                            (game as BalloonCrazy).startGame(),
+                                        child: const SizedBox.expand(
+                                          child: OverlayScreen(
+                                            title: 'G A M E   O V E R',
+                                            subtitle: 'Tap to Play Again',
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                              PlayState.won.name: (context, game) =>
-                                  GestureDetector(
-                                    behavior: HitTestBehavior.opaque,
-                                    onTap: () =>
-                                        (game as BalloonCrazy).startGame(),
-                                    child: const SizedBox.expand(
-                                      child: OverlayScreen(
-                                        title: 'Y O U   W O N ! ! !',
-                                        subtitle: 'Tap to Play Again',
+                                  PlayState.won.name: (context, game) =>
+                                      GestureDetector(
+                                        behavior: HitTestBehavior.opaque,
+                                        onTap: () =>
+                                            (game as BalloonCrazy).startGame(),
+                                        child: const SizedBox.expand(
+                                          child: OverlayScreen(
+                                            title: 'Y O U   W O N ! ! !',
+                                            subtitle: 'Tap to Play Again',
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
+                                },
+                              );
                             },
                           ),
                         ),

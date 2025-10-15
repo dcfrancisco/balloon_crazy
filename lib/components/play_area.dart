@@ -16,16 +16,13 @@ class PlayArea extends RectangleComponent with HasGameReference<BalloonCrazy> {
     super.onLoad();
     size = Vector2(game.width, game.height);
 
-    const floorHeight = 200.0;
     final floorPositionY = gameHeight - floorHeight;
 
-    // Create player and floor but don't add them here
-    // They'll be added directly to world
     player = Player(
-      position: Vector2(gameWidth / 2, floorPositionY - 50),
-      size: Vector2(80, 100),
+      position: Vector2(gameWidth / 2, floorPositionY - playerInitialYOffset),
+      size: Vector2(playerWidth, playerHeight),
     );
-    player.opacity = 0; // Hide player initially
+    player.opacity = 0;
 
     floor = Floor(
       position: Vector2(0, floorPositionY),

@@ -13,7 +13,7 @@ class Player extends SpriteComponent
     : super(anchor: Anchor.center);
 
   double targetX = 0;
-  final moveSpeed = 500.0;
+  final moveSpeed = playerMoveSpeed;
   int heldBalloons = 0;
   late double initialY;
   List<SpriteComponent> heldBalloonSprites = [];
@@ -30,9 +30,7 @@ class Player extends SpriteComponent
   @override
   void update(double dt) {
     super.update(dt);
-    // Only move if the game is playing
     if (game.playState == PlayState.playing) {
-      // Smoothly move towards target position
       final dx = targetX - position.x;
       if (dx.abs() > 1) {
         position.x += dx.sign * moveSpeed * dt;
@@ -67,8 +65,8 @@ class Player extends SpriteComponent
   void _addVisualBalloon() async {
     final balloonSprite = SpriteComponent(
       sprite: await game.loadSprite('red_balloon.png'),
-      size: Vector2(30, 30),
-      position: Vector2(0, -30.0 * heldBalloons), // Stack balloons above player
+      size: Vector2(visualBalloonSize, visualBalloonSize),
+      position: Vector2(0, -visualBalloonYOffset * heldBalloons),
       anchor: Anchor.center,
     );
     add(balloonSprite);
