@@ -68,6 +68,10 @@ class BalloonCrazy extends FlameGame
     world.add(player);
     world.add(playArea.floor);
 
+    // Add debug HUD for on-device debugging
+    final debugHud = DebugHud();
+    world.add(debugHud);
+
     playState = PlayState.welcome;
 
     debugMode = false;
@@ -176,30 +180,31 @@ class BalloonCrazy extends FlameGame
   @override
   void onPanUpdate(DragUpdateInfo info) {
     if (playState == PlayState.playing) {
-      // Scale screen coordinates to game coordinates
-      final screenX = info.eventPosition.widget.x;
-      final scaleX = gameWidth / canvasSize.x;
-      player.targetX = screenX * scaleX;
+      // Map screen/global coordinates to game world using the camera
+      final worldPos = camera.viewfinder.globalToLocal(
+        info.eventPosition.global,
+      );
+      player.targetX = worldPos.x;
     }
   }
 
   @override
   void onPanStart(DragStartInfo info) {
     if (playState == PlayState.playing) {
-      // Scale screen coordinates to game coordinates
-      final screenX = info.eventPosition.widget.x;
-      final scaleX = gameWidth / canvasSize.x;
-      player.targetX = screenX * scaleX;
+      final worldPos = camera.viewfinder.globalToLocal(
+        info.eventPosition.global,
+      );
+      player.targetX = worldPos.x;
     }
   }
 
   @override
   void onTapDown(TapDownInfo info) {
     if (playState == PlayState.playing) {
-      // Scale screen coordinates to game coordinates
-      final screenX = info.eventPosition.widget.x;
-      final scaleX = gameWidth / canvasSize.x;
-      player.targetX = screenX * scaleX;
+      final worldPos = camera.viewfinder.globalToLocal(
+        info.eventPosition.global,
+      );
+      player.targetX = worldPos.x;
     }
   }
 

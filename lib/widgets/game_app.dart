@@ -41,10 +41,7 @@ class _GameAppState extends State<GameApp> {
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [
-                Color(0xff5555fa),
-                Color.fromARGB(255, 139, 139, 251),
-              ],
+              colors: [Color(0xff5555fa), Color.fromARGB(255, 139, 139, 251)],
             ),
           ),
           child: SafeArea(
@@ -72,19 +69,34 @@ class _GameAppState extends State<GameApp> {
                             game: game,
                             overlayBuilderMap: {
                               PlayState.welcome.name: (context, game) =>
-                                  const OverlayScreen(
-                                    title: 'TAP TO PLAY',
-                                    subtitle: 'Use arrow keys or swipe',
+                                  GestureDetector(
+                                    behavior: HitTestBehavior.opaque,
+                                    onTap: () =>
+                                        (game as BalloonCrazy).startGame(),
+                                    child: const OverlayScreen(
+                                      title: 'TAP TO PLAY',
+                                      subtitle: 'Use arrow keys or swipe',
+                                    ),
                                   ),
                               PlayState.gameOver.name: (context, game) =>
-                                  const OverlayScreen(
-                                    title: 'G A M E   O V E R',
-                                    subtitle: 'Tap to Play Again',
+                                  GestureDetector(
+                                    behavior: HitTestBehavior.opaque,
+                                    onTap: () =>
+                                        (game as BalloonCrazy).startGame(),
+                                    child: const OverlayScreen(
+                                      title: 'G A M E   O V E R',
+                                      subtitle: 'Tap to Play Again',
+                                    ),
                                   ),
                               PlayState.won.name: (context, game) =>
-                                  const OverlayScreen(
-                                    title: 'Y O U   W O N ! ! !',
-                                    subtitle: 'Tap to Play Again',
+                                  GestureDetector(
+                                    behavior: HitTestBehavior.opaque,
+                                    onTap: () =>
+                                        (game as BalloonCrazy).startGame(),
+                                    child: const OverlayScreen(
+                                      title: 'Y O U   W O N ! ! !',
+                                      subtitle: 'Tap to Play Again',
+                                    ),
                                   ),
                             },
                           ),
