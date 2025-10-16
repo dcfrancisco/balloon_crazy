@@ -17,6 +17,7 @@ class Player extends SpriteComponent
   int heldBalloons = 0;
   late double initialY;
   List<SpriteComponent> heldBalloonSprites = [];
+  bool _isBanking = false;
 
   @override
   FutureOr<void> onLoad() async {
@@ -58,8 +59,17 @@ class Player extends SpriteComponent
     // Notify game that balloon was caught
     game.onBalloonCaught(balloon);
 
+    // Increase SP (difficulty) in game
+    game.increaseSP(0.5);
+
     // Add visual balloon above player
     _addVisualBalloon();
+    // Check for automatic banking threshold. Use BP from game.
+    final bp = game.bankPenalty;
+    final threshold = (7 - bp);
+    if (heldBalloons >= threshold) {
+      bank();
+    }
   }
 
   void _addVisualBalloon() async {
@@ -78,11 +88,74 @@ class Player extends SpriteComponent
     position.x = gameWidth / 2;
     targetX = gameWidth / 2;
     heldBalloons = 0;
+    _isBanking = false;
 
     // Remove visual balloons
     for (var sprite in heldBalloonSprites) {
       sprite.removeFromParent();
     }
     heldBalloonSprites.clear();
+  }
+
+  /// Banks currently held balloons: plays per-balloon pop animation, awards
+  /// 10 points per balloon, and resets heldBalloons and player's speed state.
+  /// Safe against re-entrancy.
+  Future<void> bank() async {
+    if (_isBanking || heldBalloons == 0) return;
+    _isBanking = true;
+    final toBank = heldBalloons;
+    const perBalloonMs = 100; // 0.1s per balloon
+
+    // If this component isn't mounted (unit tests or isolated usage), the
+    // TimerComponent won't tick. Fall back to a simple delayed loop so tests
+    // remain deterministic and don't hang.
+    if (!isMounted) {
+      for (int i = 0; i < toBank; i++) {
+        game.score.value += 10;
+        if (heldBalloonSprites.isNotEmpty) {
+          final last = heldBalloonSprites.removeLast();
+          last.removeFromParent();
+        }
+        await Future.delayed(Duration(milliseconds: perBalloonMs));
+      }
+    } else {
+      final completer = Completer<void>();
+      var processed = 0;
+
+      final timer = TimerComponent(
+        period: perBalloonMs / 1000.0,
+        repeat: true,
+        onTick: () {
+          // Award points per balloon
+          game.score.value += 10;
+
+          // Remove visual balloon if present
+          if (heldBalloonSprites.isNotEmpty) {
+            final last = heldBalloonSprites.removeLast();
+            last.removeFromParent();
+          }
+
+          processed++;
+          if (processed >= toBank) {
+            completer.complete();
+          }
+        },
+      );
+
+      // Add the timer to this component so it ticks with the game loop
+      add(timer);
+      timer.timer.start();
+
+      // Wait until timer processed all balloons
+      await completer.future;
+
+      // clean up
+      timer.removeFromParent();
+    }
+
+    heldBalloons = 0;
+    _isBanking = false;
+
+    game.resetSPtoBase();
   }
 }
