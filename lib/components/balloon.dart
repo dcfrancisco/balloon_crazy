@@ -5,7 +5,7 @@ import 'package:balloon_crazy/components/components.dart';
 
 class Balloon extends SpriteComponent
     with CollisionCallbacks, HasGameReference<BalloonCrazy> {
-  late Vector2 _velocity;
+  Vector2 velocity;
   final int rowIndex;
   final int columnIndex;
 
@@ -15,15 +15,8 @@ class Balloon extends SpriteComponent
     required Vector2 velocity,
     required this.rowIndex,
     required this.columnIndex,
-  }) : super(position: position, size: size, anchor: Anchor.center) {
-    _velocity = velocity;
-  }
-
-  Vector2 get velocity => _velocity;
-
-  set velocity(Vector2 newVelocity) {
-    _velocity = newVelocity;
-  }
+  }) : velocity = velocity,
+       super(position: position, size: size, anchor: Anchor.center);
 
   @override
   Future<void> onLoad() async {
@@ -35,7 +28,7 @@ class Balloon extends SpriteComponent
   @override
   void update(double dt) {
     super.update(dt);
-    position += _velocity * dt;
+    position += velocity * dt;
   }
 
   @override
@@ -44,7 +37,7 @@ class Balloon extends SpriteComponent
     PositionComponent other,
   ) {
     super.onCollisionStart(intersectionPoints, other);
-    if (other is Floor && _velocity.y > 0) {
+    if (other is Floor && velocity.y > 0) {
       _showPopAnimation();
       removeFromParent();
       game.onLoseLife();

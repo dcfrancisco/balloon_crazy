@@ -6,6 +6,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:balloon_crazy/widgets/overlay_screen.dart';
 import 'package:balloon_crazy/widgets/game_title.dart';
 import 'package:balloon_crazy/balloon_crazy.dart';
+import 'package:balloon_crazy/ui/welcome_leaderboard.dart';
+import 'package:balloon_crazy/ui/won_prompt.dart';
 import 'package:balloon_crazy/config.dart';
 
 class GameApp extends StatefulWidget {
@@ -57,7 +59,7 @@ class _GameAppState extends State<GameApp> {
                           padding: EdgeInsets.only(left: 5.0),
                           child: GameTitle(),
                         ),
-                        ScoreCard(score: game.score),
+                        ScoreCard(score: game.score, lives: game.lives),
                       ],
                     ),
                     Expanded(
@@ -76,15 +78,9 @@ class _GameAppState extends State<GameApp> {
                                 game: game,
                                 overlayBuilderMap: {
                                   PlayState.welcome.name: (context, game) =>
-                                      GestureDetector(
-                                        behavior: HitTestBehavior.opaque,
-                                        onTap: () =>
-                                            (game as BalloonCrazy).startGame(),
-                                        child: const SizedBox.expand(
-                                          child: OverlayScreen(
-                                            title: 'TAP TO PLAY',
-                                            subtitle: 'Use arrow keys or swipe',
-                                          ),
+                                      SizedBox.expand(
+                                        child: WelcomeLeaderboard(
+                                          game: game as BalloonCrazy,
                                         ),
                                       ),
                                   PlayState.gameOver.name: (context, game) =>
@@ -100,15 +96,9 @@ class _GameAppState extends State<GameApp> {
                                         ),
                                       ),
                                   PlayState.won.name: (context, game) =>
-                                      GestureDetector(
-                                        behavior: HitTestBehavior.opaque,
-                                        onTap: () =>
-                                            (game as BalloonCrazy).startGame(),
-                                        child: const SizedBox.expand(
-                                          child: OverlayScreen(
-                                            title: 'Y O U   W O N ! ! !',
-                                            subtitle: 'Tap to Play Again',
-                                          ),
+                                      SizedBox.expand(
+                                        child: WonPrompt(
+                                          game: game as BalloonCrazy,
                                         ),
                                       ),
                                 },
