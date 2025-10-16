@@ -34,7 +34,6 @@ class BalloonCrazy extends FlameGame
   /// Default 0 for compatibility.
   int bankPenalty = 0;
 
-  static const int _baseSP = 4;
   double currentSP = baseSP;
   double get width => size.x;
   double get height => size.y;
@@ -57,8 +56,11 @@ class BalloonCrazy extends FlameGame
       case PlayState.gameOver:
         overlays.add(playState.name);
         // hide world during game over
+        // Keep the player visible during the game over overlay so the
+        // final held balloons are shown. The floor remains hidden to
+        // emphasize the overlay.
         playArea.floor.visible = false;
-        playArea.player.opacity = 0;
+        playArea.player.opacity = 1;
         break;
       case PlayState.won:
         overlays.add(playState.name);

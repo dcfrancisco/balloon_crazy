@@ -2,7 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class GameTitle extends StatelessWidget {
-  const GameTitle({super.key});
+  /// Create a GameTitle.
+  ///
+  /// [balloonFontSize] controls the size of the "Balloon" word. [crazyFontSize]
+  /// controls the size of the colored "CRAZY!" letters.
+  const GameTitle({
+    super.key,
+    this.balloonFontSize = 15,
+    this.crazyFontSize = 20,
+  });
+
+  final double balloonFontSize;
+  final double crazyFontSize;
 
   @override
   Widget build(BuildContext context) {
@@ -12,9 +23,9 @@ class GameTitle extends StatelessWidget {
         Text(
           'Balloon ',
           style: GoogleFonts.pressStart2p(
-            textStyle: const TextStyle(
+            textStyle: TextStyle(
               color: Colors.white,
-              fontSize: 15,
+              fontSize: balloonFontSize,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -26,7 +37,7 @@ class GameTitle extends StatelessWidget {
             style: GoogleFonts.pressStart2p(
               textStyle: TextStyle(
                 color: color,
-                fontSize: 20,
+                fontSize: crazyFontSize,
                 fontWeight: FontWeight.bold,
               ),
             ),

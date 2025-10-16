@@ -5,8 +5,6 @@ import 'package:balloon_crazy/balloon_crazy.dart';
 import 'package:balloon_crazy/components/components.dart';
 import 'package:balloon_crazy/config.dart';
 
-enum PlayState { welcome, playing, gameOver, won }
-
 class Player extends SpriteComponent
     with HasGameReference<BalloonCrazy>, CollisionCallbacks {
   Player({required super.position, required super.size})
