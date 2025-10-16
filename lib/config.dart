@@ -11,7 +11,14 @@ const verticalSpacing = 20.0;
 const gridStartMargin =
     20.0; // left/right margin inside gameWidth when centering grid
 const gridStartY = 100.0;
+// Additional vertical offset to nudge balloons lower on the screen
+const gridStartYOffset = 20.0;
 const balloonDropSpeed = 100.0; // pixels per second when balloons fall
+
+// Gameplay tuning
+const baseSP =
+    4.0; // base speed unit from original; used as a multiplier baseline
+const hitPointY = 164.0; // reference hit point Y (from original documentation)
 
 // Player / floor
 const floorHeight = 200.0;

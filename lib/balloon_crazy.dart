@@ -29,6 +29,13 @@ class BalloonCrazy extends FlameGame
   final ValueNotifier<int> score = ValueNotifier<int>(0);
   final ValueNotifier<int> lives = ValueNotifier<int>(4);
   final rand = math.Random();
+
+  /// bankPenalty (BP) used by the original game's dynamic threshold (7 - BP)
+  /// Default 0 for compatibility.
+  int bankPenalty = 0;
+
+  static const int _baseSP = 4;
+  double currentSP = baseSP;
   double get width => size.x;
   double get height => size.y;
   double? lastWorldX;
@@ -42,14 +49,33 @@ class BalloonCrazy extends FlameGame
     _playState = playState;
     switch (playState) {
       case PlayState.welcome:
+        overlays.add(playState.name);
+        // hide floor and player on welcome
+        playArea.floor.visible = false;
+        playArea.player.opacity = 0;
+        break;
       case PlayState.gameOver:
+        overlays.add(playState.name);
+        // hide world during game over
+        playArea.floor.visible = false;
+        playArea.player.opacity = 0;
+        break;
       case PlayState.won:
         overlays.add(playState.name);
+        // On win, keep the player visible (don't hide) and show floor so
+        // the final state feels anchored; clear held balloons to avoid
+        // leftover visuals.
+        playArea.floor.visible = true;
+        playArea.player.opacity = 1;
+        playArea.player.reset();
         break;
       case PlayState.playing:
         overlays.remove(PlayState.welcome.name);
         overlays.remove(PlayState.gameOver.name);
         overlays.remove(PlayState.won.name);
+        // show floor/player when the game is playing
+        playArea.floor.visible = true;
+        playArea.player.opacity = 1;
         break;
     }
   }
@@ -96,7 +122,7 @@ class BalloonCrazy extends FlameGame
 
     final totalGridWidth = columns * (balloonSize.x + spacingX) - spacingX;
     final startX = ((gameWidth - totalGridWidth) / 2) + gridStartMargin;
-    final startY = gridStartY;
+    final startY = gridStartY + gridStartYOffset;
 
     balloonMatrix = List.generate(
       columns,
@@ -145,9 +171,17 @@ class BalloonCrazy extends FlameGame
       repeat: true,
       onTick: () {
         dropBalloon();
-        if (balloonMatrix.every(
+        final matrixEmpty = balloonMatrix.every(
           (column) => column.every((balloon) => balloon == null),
-        )) {
+        );
+        // Consider the game finished only when the matrix is empty and there
+        // are no balloons still falling (velocity.y > 0). Some balloon
+        // components may remain with zero velocity (stalled); those should
+        // not block the win condition.
+        final anyFalling = world.children.whereType<Balloon>().any(
+          (balloon) => balloon.velocity.y > 0,
+        );
+        if (matrixEmpty && !anyFalling) {
           balloonDropTimer.removeFromParent();
           playState = PlayState.won;
         }
@@ -166,6 +200,17 @@ class BalloonCrazy extends FlameGame
         }
       }
     }
+  }
+
+  /// Increase the current SP by [delta]. This affects how strictly we check
+  /// vertical collision windows and/or speeds. Keep simple for now.
+  void increaseSP(double delta) {
+    currentSP += delta;
+  }
+
+  /// Reset SP (speed/precision state) back to the documented base value.
+  void resetSPtoBase() {
+    currentSP = baseSP;
   }
 
   @override

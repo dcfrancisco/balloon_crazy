@@ -378,6 +378,35 @@ This creates a perfect risk/reward loop that keeps players engaged!
 *Original game: BALLOON.BAS (1980s)*  
 *Reference for: Balloon Crazy Flutter/Flame remake* 
 
+## 🔢 Feature Checklist (tabular)
+
+| Feature | Status | Notes | Priority |
+|---|---|---|---:|
+| Grid: 4 rows × 15 columns | Not implemented | Current grid is configurable; set columns=15 to match original | High |
+| One-balloon-at-a-time drop | Partial | Current drop logic is column-based/randomized; needs strict sequencing | High |
+| Precise HP / SP! parity | Not implemented | Tune hit point and frame math to match original timing | High |
+| Catching & stacking visuals | Partial | Visual stacking implemented; refine vertical offsets and bank timing | Medium |
+| Banking logic (core) | Done (logic) | `Player.bank()` implemented and wired; awards points and resets state. Visual per-balloon pop & SFX still pending. | High |
+| Banking animation (per-balloon visuals & SFX) | Partial | Logic exists; needs per-balloon pop sprite timing, pitch-swept sounds, and polish to match original timing. | High |
+| Death / tumble animation | Partial | Basic lose-life flow exists; polish bounce/tumble timing and sounds | Medium |
+| Sound effects (pop, bank, death) | Not implemented | Add SFX and sound toggle in options; integrate during bank() and death flows | High |
+| High score persistence | Not implemented | Save/load best score (shared_preferences or platform storage) | Medium |
+| Pause / resume overlay | Not implemented | Freeze timers and show overlay UI | Medium |
+| Difficulty modes (DF) | Not implemented | Provide DF=5/10/15 presets and UI | Low |
+| Input smoothing toggle | Done (configurable) | Immediate vs smooth movement currently available in code; expose flag in config | Low |
+| Debug HUD runtime toggle | Not implemented | Consider a dev-only overlay toggle or keybinding | Low |
+| Asset completeness check | Partial | Some sprites present; verify all densities and names | High |
+| Test assets for CI | Not implemented | Add small placeholder images under `assets/images/test/` | Medium |
+| Unit & widget tests (banking, scoring) | In progress | Basic unit tests added (`bank_unit_test.dart`, `bank_widget_test.dart` renamed/converted to unit-style). Expand coverage for edge cases and integration tests. | Medium |
+| CI for tests & analysis | Not implemented | Add GitHub Actions for `flutter test` and `flutter analyze` | Medium |
+| Performance profiling & optimizations | Not implemented | Profile on low-end devices, reduce allocations | Low |
+| Mobile polish (safe area, orientation) | Partial | Safe area considered; check orientation handling | Low |
+| Controller/keyboard support | Optional | Desktop builds only; map arrow/keys to movement | Low |
+| Visual polish (particles, shake, haptics) | Not implemented | Add as optional effects with toggles | Low |
+| Localization support | Not implemented | Externalize strings for translation | Low |
+| Developer docs & architecture notes | Not implemented | Add README DEV, component diagrams | Medium |
+
+
 ## ✅ Not implemented / TODO
 
 Below is a running checklist of gameplay systems, polish, and engineering items that are not yet implemented (or are only partially implemented) in the current repo. Use this as a development checklist.

@@ -28,6 +28,8 @@ class PlayArea extends RectangleComponent with HasGameReference<BalloonCrazy> {
       position: Vector2(0, floorPositionY),
       size: Vector2(gameWidth, floorHeight),
     );
+    // hide floor on welcome screen; will be shown when game starts
+    floor.visible = false;
   }
 
   void resetGame() {
