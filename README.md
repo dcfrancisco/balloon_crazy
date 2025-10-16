@@ -86,3 +86,25 @@ Enjoy the delightful and challenging world of Balloon Crazy! Catch those balloon
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Fonts / Attributions
+
+This project uses the following fonts. The full license texts are included in the repository under `assets/fonts/`.
+
+- DigitalReadout — included in `assets/fonts/`.
+   - License file: `assets/fonts/LICENSE_DigitalReadout.txt`
+   - Please consult the license text in the repository for attribution/usage details.
+
+- Press Start 2P — provided by Google Fonts and used via `google_fonts` for the game title and UI.
+   - License: SIL Open Font License (OFL 1.1)
+   - License file included: `assets/fonts/LICENSE_PressStart2P.txt`
+
+Suggested in-app attribution (copyable):
+
+```
+Fonts:
+- DigitalReadout — included with this app (see assets/fonts/LICENSE_DigitalReadout.txt)
+- Press Start 2P — Google Fonts, SIL Open Font License (OFL 1.1) (see assets/fonts/LICENSE_PressStart2P.txt)
+```
+
+If you distributed these fonts from another source, please replace the filenames and license texts above with the actual files and attribution required by the font authors.
