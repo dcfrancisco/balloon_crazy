@@ -1,26 +1,29 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 import 'package:balloon_crazy/balloon_crazy.dart';
-import 'package:flame/game.dart';
+import 'package:balloon_crazy/ui/welcome_leaderboard.dart';
+
+class _FakeGame extends BalloonCrazy {
+  bool started = false;
+
+  @override
+  void startGame() {
+    started = true;
+  }
+}
 
 void main() {
   testWidgets('welcome overlay shows and starts game on tap', (tester) async {
-    final game = BalloonCrazy();
+    final game = _FakeGame();
+    await tester.pumpWidget(MaterialApp(home: WelcomeLeaderboard(game: game)));
 
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(body: GameWidget(game: game)),
-      ),
-    );
+    await tester.pump(const Duration(milliseconds: 500));
 
-    await tester.pumpAndSettle();
-
-    // The overlay text is provided by OverlayScreen in the GameApp; check that the welcome overlay is present
     expect(find.text('TAP TO PLAY'), findsOneWidget);
 
     await tester.tap(find.text('TAP TO PLAY'));
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(milliseconds: 500));
 
-    expect(game.playState, equals(PlayState.playing));
+    expect(game.started, isTrue);
   });
 }

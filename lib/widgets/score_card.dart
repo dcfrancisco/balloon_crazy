@@ -2,10 +2,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class ScoreCard extends StatelessWidget {
-  const ScoreCard({super.key, required this.score, this.lives});
+  const ScoreCard({super.key, required this.score, this.lives, this.held});
 
   final ValueNotifier<int> score;
   final ValueListenable<int>? lives;
+  final ValueListenable<int>? held;
 
   @override
   Widget build(BuildContext context) {
@@ -68,12 +69,26 @@ class ScoreCard extends StatelessWidget {
           );
         }
 
+        final stackWidget = held == null
+            ? const SizedBox.shrink()
+            : ValueListenableBuilder<int>(
+                valueListenable: held!,
+                builder: (context, heldValue, _) => Text(
+                  'STACK: $heldValue',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge!.copyWith(fontSize: 13.0),
+                ),
+              );
+
         return Padding(
           padding: const EdgeInsets.fromLTRB(12, 6, 12, 18),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               livesWidget,
+              const SizedBox(width: 8),
+              stackWidget,
               const SizedBox(width: 8),
               Text(
                 'Score: $scoreValue'.toUpperCase(),

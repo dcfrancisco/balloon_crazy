@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:async' as async;
 import 'dart:math' as math;
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
@@ -7,16 +8,17 @@ import 'package:flutter/material.dart';
 
 import 'package:balloon_crazy/components/components.dart';
 import 'package:balloon_crazy/config.dart';
+import 'package:balloon_crazy/domain/game_session.dart';
+import 'package:balloon_crazy/domain/swept_collision.dart';
+import 'package:balloon_crazy/input/game_coordinate_mapper.dart';
 
 enum PlayState { welcome, playing, gameOver, won }
 
 class BalloonCrazy extends FlameGame
     with HasCollisionDetection, TapDetector, PanDetector {
   late final Player player;
+  late final BalloonField balloonField;
   late PlayArea playArea;
-
-  List<List<Balloon?>> balloonMatrix = [];
-  late TimerComponent balloonDropTimer;
 
   BalloonCrazy()
     : super(
@@ -28,7 +30,11 @@ class BalloonCrazy extends FlameGame
 
   final ValueNotifier<int> score = ValueNotifier<int>(0);
   final ValueNotifier<int> lives = ValueNotifier<int>(4);
+  final ValueNotifier<int> heldBalloons = ValueNotifier<int>(0);
+  final ValueNotifier<String?> feedback = ValueNotifier<String?>(null);
+  async.Timer? _feedbackTimer;
   final rand = math.Random();
+  late GameSession session;
 
   /// bankPenalty (BP) used by the original game's dynamic threshold (7 - BP)
   /// Default 0 for compatibility.
@@ -41,6 +47,10 @@ class BalloonCrazy extends FlameGame
   double? lastWidgetX;
   double widgetRenderWidth = 0.0;
   double widgetRenderHeight = 0.0;
+  final coordinateMapper = const GameCoordinateMapper(
+    worldWidth: gameWidth,
+    worldHeight: gameHeight,
+  );
 
   late PlayState _playState = PlayState.welcome;
   PlayState get playState => _playState;
@@ -48,13 +58,17 @@ class BalloonCrazy extends FlameGame
     _playState = playState;
     switch (playState) {
       case PlayState.welcome:
+        overlays.remove('paused');
         overlays.add(playState.name);
+        balloonField.visible = false;
         // hide floor and player on welcome
         playArea.floor.visible = false;
         playArea.player.opacity = 0;
         break;
       case PlayState.gameOver:
+        overlays.remove('paused');
         overlays.add(playState.name);
+        balloonField.visible = false;
         // hide world during game over
         // Keep the player visible during the game over overlay so the
         // final held balloons are shown. The floor remains hidden to
@@ -63,7 +77,9 @@ class BalloonCrazy extends FlameGame
         playArea.player.opacity = 1;
         break;
       case PlayState.won:
+        overlays.remove('paused');
         overlays.add(playState.name);
+        balloonField.visible = false;
         // On win, keep the player visible (don't hide) and show floor so
         // the final state feels anchored; clear held balloons to avoid
         // leftover visuals.
@@ -82,6 +98,22 @@ class BalloonCrazy extends FlameGame
     }
   }
 
+  bool get isPaused => session.phase == SessionPhase.paused;
+
+  void pauseGame() {
+    if (playState != PlayState.playing || !session.isPlaying) return;
+    session.pause();
+    overlays.add('paused');
+    pauseEngine();
+  }
+
+  void resumeGame() {
+    if (!isPaused) return;
+    session.resume();
+    overlays.remove('paused');
+    resumeEngine();
+  }
+
   @override
   Future<void> onLoad() async {
     super.onLoad();
@@ -93,6 +125,9 @@ class BalloonCrazy extends FlameGame
 
     // Wait for playArea to initialize
     await playArea.loaded;
+
+    balloonField = BalloonField();
+    world.add(balloonField);
 
     // Add player and floor directly to world (same level as balloons)
     player = playArea.player;
@@ -112,96 +147,100 @@ class BalloonCrazy extends FlameGame
     world.removeAll(world.children.query<Balloon>());
 
     playArea.resetGame();
+    balloonField.reset();
+    balloonField.visible = true;
     score.value = 0;
     lives.value = initialLives;
+    heldBalloons.value = 0;
+    _clearFeedback();
+    overlays.remove('paused');
     playState = PlayState.playing;
-    final rows = gridRows;
-    final columns = gridColumns;
-
-    final balloonSize = Vector2(balloonWidth, balloonHeight);
-    final spacingX = horizontalSpacing;
-    final spacingY = verticalSpacing;
-
-    final totalGridWidth = columns * (balloonSize.x + spacingX) - spacingX;
-    final startX = ((gameWidth - totalGridWidth) / 2) + gridStartMargin;
-    final startY = gridStartY + gridStartYOffset;
-
-    balloonMatrix = List.generate(
-      columns,
-      (col) => List<Balloon?>.filled(rows, null),
-    );
-
-    for (int row = 0; row < rows; row++) {
-      for (int col = 0; col < columns; col++) {
-        final balloon = Balloon(
-          position: Vector2(
-            startX + col * (balloonSize.x + spacingX),
-            startY + row * (balloonSize.y + spacingY),
-          ),
-          size: balloonSize,
-          velocity: Vector2(0, 0),
-          rowIndex: row,
-          columnIndex: col,
-        );
-        world.add(balloon);
-        balloonMatrix[col][row] = balloon;
-      }
-    }
-
-    startDroppingBalloons();
+    session = GameSession(seed: rand.nextInt(1 << 31));
+    spawnNextBalloon();
   }
 
-  void dropBalloon() {
-    final columnIndex = rand.nextInt(balloonMatrix.length);
-
-    for (int row = balloonMatrix[columnIndex].length - 1; row >= 0; row--) {
-      final balloon = balloonMatrix[columnIndex][row];
-      if (balloon != null && balloon.velocity == Vector2.zero()) {
-        balloon.velocity = Vector2(0, balloonDropSpeed);
-        balloonMatrix[columnIndex][row] = null;
-        break;
-      }
-    }
-  }
-
-  void startDroppingBalloons() {
-    if (playState != PlayState.playing) return;
-
-    final randomInterval = rand.nextDouble() * 2 + 1;
-    balloonDropTimer = TimerComponent(
-      period: randomInterval,
-      repeat: true,
-      onTick: () {
-        dropBalloon();
-        final matrixEmpty = balloonMatrix.every(
-          (column) => column.every((balloon) => balloon == null),
-        );
-        // Consider the game finished only when the matrix is empty and there
-        // are no balloons still falling (velocity.y > 0). Some balloon
-        // components may remain with zero velocity (stalled); those should
-        // not block the win condition.
-        final anyFalling = world.children.whereType<Balloon>().any(
-          (balloon) => balloon.velocity.y > 0,
-        );
-        if (matrixEmpty && !anyFalling) {
-          balloonDropTimer.removeFromParent();
-          playState = PlayState.won;
+  void spawnNextBalloon() {
+    session.startNext();
+    final selected = session.activeBalloon;
+    if (selected == null) {
+      final events = session.finishBoard();
+      for (final event in events) {
+        if (event is BankSettled) {
+          score.value += event.points;
+          player.clearHeldVisuals();
         }
-      },
+      }
+      if (events.whereType<SessionFinished>().isNotEmpty) {
+        playState = PlayState.won;
+      }
+      return;
+    }
+    balloonField.removeBalloon(row: selected.row, column: selected.column);
+    world.add(
+      Balloon(
+        position: Vector2(selected.x * gameWidth, 40),
+        size: Vector2(balloonWidth, balloonHeight),
+        velocity: Vector2(0, GameSession.baseSpeed),
+        domainId: selected.id,
+        rowIndex: selected.row,
+        columnIndex: selected.column,
+      ),
     );
-    add(balloonDropTimer);
   }
 
   void onBalloonCaught(Balloon balloon) {
-    // Remove balloon from matrix
-    for (int col = 0; col < balloonMatrix.length; col++) {
-      for (int row = 0; row < balloonMatrix[col].length; row++) {
-        if (balloonMatrix[col][row] == balloon) {
-          balloonMatrix[col][row] = null;
-          break;
-        }
+    if (session.activeBalloon?.id != balloon.domainId) return;
+    final events = session.catchActive();
+    heldBalloons.value = session.held;
+    _showFeedback('CATCH!');
+    for (final event in events) {
+      if (event is BankSettled) {
+        score.value += event.points;
+        heldBalloons.value = 0;
+        _showFeedback('BANK +${event.points}');
+        player.clearHeldVisuals();
       }
     }
+    if (session.activeBalloon == null &&
+        session.phase == SessionPhase.playing) {
+      spawnNextBalloon();
+    }
+  }
+
+  bool balloonCrossedPlayer(
+    Balloon balloon, {
+    required double previousY,
+    required double nextY,
+  }) {
+    return sweptVerticalCatch(
+      previousY: previousY,
+      nextY: nextY,
+      objectHeight: balloon.size.y,
+      objectX: balloon.position.x,
+      objectWidth: balloon.size.x,
+      targetY: player.position.y,
+      targetHeight: player.size.y,
+      targetX: player.position.x,
+      targetWidth: player.size.x,
+    );
+  }
+
+  bool balloonCrossedFloor(
+    Balloon balloon, {
+    required double previousY,
+    required double nextY,
+  }) {
+    return sweptVerticalCatch(
+      previousY: previousY,
+      nextY: nextY,
+      objectHeight: balloon.size.y,
+      objectX: balloon.position.x,
+      objectWidth: balloon.size.x,
+      targetY: playArea.floor.position.y + playArea.floor.size.y / 2,
+      targetHeight: playArea.floor.size.y,
+      targetX: playArea.floor.position.x + playArea.floor.size.x / 2,
+      targetWidth: playArea.floor.size.x,
+    );
   }
 
   /// Increase the current SP by [delta]. This affects how strictly we check
@@ -226,92 +265,81 @@ class BalloonCrazy extends FlameGame
   @override
   void onPanUpdate(DragUpdateInfo info) {
     if (playState == PlayState.playing) {
-      // store widget-x for diagnostics
-      final widgetX = info.eventPosition.widget.x;
-      lastWidgetX = widgetX;
-
-      // If we know the rendered GameWidget width, compute a proportional
-      // mapping from widget X -> world X so touches map across the full
-      // gameWidth regardless of layout scaling (FittedBox, etc.).
-      double worldX;
-      if (widgetRenderWidth > 0) {
-        final ratio = (widgetX / widgetRenderWidth).clamp(0.0, 1.0);
-        worldX = ratio * gameWidth;
-      } else {
-        // Fallback to camera mapping if render size isn't available yet.
-        final worldPos = camera.viewfinder.globalToLocal(
-          info.eventPosition.global,
-        );
-        worldX = worldPos.x;
-      }
-
-      lastWorldX = worldX;
-
-      // Immediate movement: set player position directly to follow finger
-      final minX = player.size.x / 2;
-      final maxX = gameWidth - player.size.x / 2;
-      final newX = worldX.clamp(minX, maxX);
-      player.targetX = newX;
-      player.position.x = newX;
+      _movePlayerToWidgetPoint(
+        info.eventPosition.widget.x,
+        info.eventPosition.widget.y,
+      );
     }
   }
 
   @override
   void onPanStart(DragStartInfo info) {
     if (playState == PlayState.playing) {
-      final widgetX = info.eventPosition.widget.x;
-      lastWidgetX = widgetX;
-
-      double worldX;
-      if (widgetRenderWidth > 0) {
-        final ratio = (widgetX / widgetRenderWidth).clamp(0.0, 1.0);
-        worldX = ratio * gameWidth;
-      } else {
-        final worldPos = camera.viewfinder.globalToLocal(
-          info.eventPosition.global,
-        );
-        worldX = worldPos.x;
-      }
-
-      lastWorldX = worldX;
-      // immediate set to test movement responsiveness
-      player.targetX = worldX;
-      player.position.x = worldX;
+      _movePlayerToWidgetPoint(
+        info.eventPosition.widget.x,
+        info.eventPosition.widget.y,
+      );
     }
   }
 
   @override
   void onTapDown(TapDownInfo info) {
     if (playState == PlayState.playing) {
-      final widgetX = info.eventPosition.widget.x;
-      lastWidgetX = widgetX;
-
-      double worldX;
-      if (widgetRenderWidth > 0) {
-        final ratio = (widgetX / widgetRenderWidth).clamp(0.0, 1.0);
-        worldX = ratio * gameWidth;
-      } else {
-        final worldPos = camera.viewfinder.globalToLocal(
-          info.eventPosition.global,
-        );
-        worldX = worldPos.x;
-      }
-
-      lastWorldX = worldX;
-      // immediate set when tapping
-      player.targetX = worldX;
-      player.position.x = worldX;
+      _movePlayerToWidgetPoint(
+        info.eventPosition.widget.x,
+        info.eventPosition.widget.y,
+      );
     }
   }
 
-  void onLoseLife() {
-    lives.value--;
-    if (lives.value <= 0) {
-      playState = PlayState.gameOver;
-      balloonDropTimer.removeFromParent();
-    } else {
-      player.reset();
-    }
+  void _movePlayerToWidgetPoint(double widgetX, double widgetY) {
+    if (player.isMissAnimating) return;
+    lastWidgetX = widgetX;
+    final worldPoint = coordinateMapper.worldPoint(
+      widgetX: widgetX,
+      widgetY: widgetY,
+      renderWidth: widgetRenderWidth,
+      renderHeight: widgetRenderHeight,
+    );
+    final minX = player.size.x / 2;
+    final maxX = gameWidth - player.size.x / 2;
+    final worldX = worldPoint.x.clamp(minX, maxX);
+    lastWorldX = worldX;
+    player.targetX = worldX;
+    player.position.x = worldX;
+  }
+
+  void onBalloonMissed(Balloon balloon) {
+    if (session.activeBalloon?.id != balloon.domainId) return;
+    session.missActive();
+    lives.value = session.lives;
+    heldBalloons.value = session.held;
+    _showFeedback('MISS!');
+    final isGameOver = session.phase == SessionPhase.gameOver;
+    player.playMissAnimation(
+      onComplete: () {
+        if (isGameOver) {
+          playState = PlayState.gameOver;
+        } else {
+          player.reset();
+          spawnNextBalloon();
+        }
+      },
+    );
+  }
+
+  void _showFeedback(String message) {
+    _feedbackTimer?.cancel();
+    feedback.value = message;
+    _feedbackTimer = async.Timer(
+      const Duration(milliseconds: 900),
+      _clearFeedback,
+    );
+  }
+
+  void _clearFeedback() {
+    _feedbackTimer = null;
+    feedback.value = null;
   }
 
   @override
