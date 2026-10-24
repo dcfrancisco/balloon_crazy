@@ -25,3 +25,14 @@ jobs:
           cache: true
       - name: Verify Gate 1
         run: ./tool/verify.sh
+      - name: Export formatter patch for Intel macOS recovery
+        if: always()
+        run: |
+          dart format lib test
+          git diff --binary > /tmp/balloon-crazy-format.patch
+      - name: Upload formatter patch
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: formatter-patch
+          path: /tmp/balloon-crazy-format.patch
