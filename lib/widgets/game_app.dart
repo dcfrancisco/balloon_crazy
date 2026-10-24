@@ -70,13 +70,30 @@ class _GameAppState extends State<GameApp> with WidgetsBindingObserver {
                 child: Column(
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Padding(
-                          padding: EdgeInsets.only(left: 5.0),
-                          child: GameTitle(),
+                        Expanded(
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: FittedBox(
+                              alignment: Alignment.centerLeft,
+                              fit: BoxFit.scaleDown,
+                              child: const Padding(
+                                padding: EdgeInsets.only(left: 5.0),
+                                child: GameTitle(),
+                              ),
+                            ),
+                          ),
                         ),
-                        ScoreCard(score: game.score, lives: game.lives),
+                        Flexible(
+                          child: FittedBox(
+                            alignment: Alignment.centerRight,
+                            fit: BoxFit.scaleDown,
+                            child: ScoreCard(
+                              score: game.score,
+                              lives: game.lives,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                     Expanded(
