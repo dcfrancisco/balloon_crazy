@@ -20,7 +20,7 @@ The current screenshots communicate the premise, but tiny downscaled sprites, a 
 | `assets/images/player.png` | Strong recognizable design; 1024² source downscaled drastically | Keep as style reference; re-export approved pixel-scale frames |
 | `assets/images/red_balloon.png` | Used at runtime; 80×94 and stylistically close to current game | Keep as visual reference; normalize into atlas |
 | `balloon_red.png`, `balloon_green.png` | Different 48×64 set; unused | Do not ship in v1 unless provenance and future use are approved |
-| `balloon_pop.png` | 80×21 three-frame strip; frame metadata absent | Rebuild/normalize as named pop frames |
+| `balloon_pop.png` | 80×21 three-frame strip; frame metadata absent | Runtime now treats it as a named 3-frame horizontal pop sequence; provenance and final export remain open |
 | `heart.png` | 1024²; current lives UI actually uses player art | Decide between tiny skater life icon (more original) or heart; use only one |
 | `pop.wav`, `drop.wav`, `game_over.wav` | Packaged but unused; provenance not documented | Audition, normalize, and license-clear before integration or replace |
 | DigitalReadout fonts | Bundled; license files claimed but absent | Block release until exact license/source are recorded |

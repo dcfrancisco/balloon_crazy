@@ -9,6 +9,8 @@
   sprites while retaining one authoritative falling/colliding balloon.
 - Completed Gate 4 Pass 1's offline playable loop; device validation and store
   hardening remain before the next release gate.
+- Corrected the balloon pop effect to use its actual three-frame horizontal
+  sprite strip instead of an invalid second-row frame.
 
 - Added the dependency-free deterministic `GameSession` rules core for Gate 2.
 - Added seeded selection, catch/miss, held-stack banking, pause, and terminal
