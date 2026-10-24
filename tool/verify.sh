@@ -12,6 +12,10 @@ if ! command -v "$flutter_bin" >/dev/null 2>&1; then
   exit 1
 fi
 
+flutter_path="$(command -v "$flutter_bin")"
+flutter_root="$(cd "$(dirname "$flutter_path")/.." && pwd)"
+dart_bin="${DART_BIN:-$flutter_root/bin/cache/dart-sdk/bin/dart}"
+
 actual_flutter="$($flutter_bin --version 2>/dev/null | sed -n '1p')"
 if [[ "$actual_flutter" != *"Flutter $expected_flutter"* ]]; then
   echo "Expected Flutter $expected_flutter but found: $actual_flutter" >&2
@@ -26,7 +30,7 @@ echo "== Dependencies =="
 $flutter_bin pub get
 
 echo "== Formatting =="
-$flutter_bin dart format --output=none --set-exit-if-changed lib test
+"$dart_bin" format --output=none --set-exit-if-changed lib test
 
 echo "== Static analysis =="
 $flutter_bin analyze
