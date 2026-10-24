@@ -7,6 +7,8 @@
   the canonical rules or adding production assets.
 - Restored the visible four-row, fifteen-balloon board field as presentation
   sprites while retaining one authoritative falling/colliding balloon.
+- Completed Gate 4 Pass 1's offline playable loop; device validation and store
+  hardening remain before the next release gate.
 
 - Added the dependency-free deterministic `GameSession` rules core for Gate 2.
 - Added seeded selection, catch/miss, held-stack banking, pause, and terminal
