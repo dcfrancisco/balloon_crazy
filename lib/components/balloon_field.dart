@@ -16,7 +16,9 @@ class BalloonField extends PositionComponent {
   final Map<String, SpriteComponent> _balloons = {};
   late Sprite _sprite;
   bool _ready = false;
-  bool visible = true;
+  // The board is opt-in: BalloonCrazy enables it only for an active game.
+  // This prevents async asset loading from flashing balloons on menus/results.
+  bool visible = false;
 
   @override
   void render(Canvas canvas) {
