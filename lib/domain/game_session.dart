@@ -19,13 +19,8 @@ class ActiveBalloon {
   final double x;
   final double y;
 
-  ActiveBalloon copyWith({double? y}) => ActiveBalloon(
-        id: id,
-        row: row,
-        column: column,
-        x: x,
-        y: y ?? this.y,
-      );
+  ActiveBalloon copyWith({double? y}) =>
+      ActiveBalloon(id: id, row: row, column: column, x: x, y: y ?? this.y);
 }
 
 sealed class GameEvent {
@@ -62,11 +57,12 @@ class SessionFinished extends GameEvent {
 /// code consumes the events and projects [activeBalloon] and the counters.
 class GameSession {
   GameSession({int seed = 0, this.rows = 4, this.columns = 15})
-      : _random = Random(seed),
-        currentRow = rows - 1,
-        _remaining = List.generate(rows, (row) => <int>{
-              for (var column = 0; column < columns; column++) column,
-            });
+    : _random = Random(seed),
+      currentRow = rows - 1,
+      _remaining = List.generate(
+        rows,
+        (row) => <int>{for (var column = 0; column < columns; column++) column},
+      );
 
   static const int startingLives = 4;
   static const double baseSpeed = 100;
@@ -88,7 +84,8 @@ class GameSession {
   ActiveBalloon? activeBalloon;
   int _nextId = 0;
 
-  int get resolved => rows * columns -
+  int get resolved =>
+      rows * columns -
       _remaining.fold<int>(0, (total, row) => total + row.length) -
       (activeBalloon == null ? 0 : 1);
 
@@ -124,7 +121,8 @@ class GameSession {
     final nextY = balloon.y + speed * dt;
     activeBalloon = balloon.copyWith(y: nextY);
     final events = <GameEvent>[];
-    if (balloon.y < catchPlane && nextY >= catchPlane &&
+    if (balloon.y < catchPlane &&
+        nextY >= catchPlane &&
         (balloon.x * 1000 - playerX * 1000).abs() <= catchWindow) {
       events.addAll(catchActive());
     } else if (nextY >= missPlane) {

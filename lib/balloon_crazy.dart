@@ -161,7 +161,8 @@ class BalloonCrazy extends FlameGame
         player.clearHeldVisuals();
       }
     }
-    if (session.activeBalloon == null && session.phase == SessionPhase.playing) {
+    if (session.activeBalloon == null &&
+        session.phase == SessionPhase.playing) {
       spawnNextBalloon();
     }
   }
