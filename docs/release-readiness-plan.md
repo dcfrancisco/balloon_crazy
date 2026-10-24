@@ -46,7 +46,10 @@ debug artifact builds. Final Gate 3 exit remains five consecutive full
 physical-device sessions without stale state; at least four of five players
 must explain bank risk after one play.
 
-## Gate 4 — game feel, local product, and assets (3–5 days)
+## Gate 4 — game feel, local product, and assets (3–5 days) — Pass 1 in progress
+
+- Pass 1 adds an explicit held-stack HUD, catch/miss/bank feedback, and safe
+  pause/resume behavior using existing assets. See ADR 0008.
 
 - Add approved catch/bank/miss/win effects, audio, haptics, reduced-motion handling, pause, tutorial, settings.
 - Unify win/game-over results; inject resilient versioned local leaderboard storage and reset.

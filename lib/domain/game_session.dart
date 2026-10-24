@@ -84,6 +84,8 @@ class GameSession {
   ActiveBalloon? activeBalloon;
   int _nextId = 0;
 
+  bool get isPlaying => phase == SessionPhase.playing;
+
   int get resolved =>
       rows * columns -
       _remaining.fold<int>(0, (total, row) => total + row.length) -

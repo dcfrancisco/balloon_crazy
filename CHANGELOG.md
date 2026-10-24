@@ -2,6 +2,10 @@
 
 ## Unreleased (0.1.x)
 
+- Started Gate 4 Pass 1: added a visible held-balloon stack, catch/miss/bank
+  feedback, and Android lifecycle-safe pause/resume behavior without changing
+  the canonical rules or adding production assets.
+
 - Added the dependency-free deterministic `GameSession` rules core for Gate 2.
 - Added seeded selection, catch/miss, held-stack banking, pause, and terminal
   outcome tests without changing the existing visual assets.

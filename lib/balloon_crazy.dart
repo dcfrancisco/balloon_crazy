@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:async' as async;
 import 'dart:math' as math;
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
@@ -28,6 +29,9 @@ class BalloonCrazy extends FlameGame
 
   final ValueNotifier<int> score = ValueNotifier<int>(0);
   final ValueNotifier<int> lives = ValueNotifier<int>(4);
+  final ValueNotifier<int> heldBalloons = ValueNotifier<int>(0);
+  final ValueNotifier<String?> feedback = ValueNotifier<String?>(null);
+  async.Timer? _feedbackTimer;
   final rand = math.Random();
   late GameSession session;
 
@@ -53,12 +57,14 @@ class BalloonCrazy extends FlameGame
     _playState = playState;
     switch (playState) {
       case PlayState.welcome:
+        overlays.remove('paused');
         overlays.add(playState.name);
         // hide floor and player on welcome
         playArea.floor.visible = false;
         playArea.player.opacity = 0;
         break;
       case PlayState.gameOver:
+        overlays.remove('paused');
         overlays.add(playState.name);
         // hide world during game over
         // Keep the player visible during the game over overlay so the
@@ -68,6 +74,7 @@ class BalloonCrazy extends FlameGame
         playArea.player.opacity = 1;
         break;
       case PlayState.won:
+        overlays.remove('paused');
         overlays.add(playState.name);
         // On win, keep the player visible (don't hide) and show floor so
         // the final state feels anchored; clear held balloons to avoid
@@ -85,6 +92,22 @@ class BalloonCrazy extends FlameGame
         playArea.player.opacity = 1;
         break;
     }
+  }
+
+  bool get isPaused => session.phase == SessionPhase.paused;
+
+  void pauseGame() {
+    if (playState != PlayState.playing || !session.isPlaying) return;
+    session.pause();
+    overlays.add('paused');
+    pauseEngine();
+  }
+
+  void resumeGame() {
+    if (!isPaused) return;
+    session.resume();
+    overlays.remove('paused');
+    resumeEngine();
   }
 
   @override
@@ -119,6 +142,9 @@ class BalloonCrazy extends FlameGame
     playArea.resetGame();
     score.value = 0;
     lives.value = initialLives;
+    heldBalloons.value = 0;
+    _clearFeedback();
+    overlays.remove('paused');
     playState = PlayState.playing;
     session = GameSession(seed: rand.nextInt(1 << 31));
     spawnNextBalloon();
@@ -155,9 +181,13 @@ class BalloonCrazy extends FlameGame
   void onBalloonCaught(Balloon balloon) {
     if (session.activeBalloon?.id != balloon.domainId) return;
     final events = session.catchActive();
+    heldBalloons.value = session.held;
+    _showFeedback('CATCH!');
     for (final event in events) {
       if (event is BankSettled) {
         score.value += event.points;
+        heldBalloons.value = 0;
+        _showFeedback('BANK +${event.points}');
         player.clearHeldVisuals();
       }
     }
@@ -272,12 +302,28 @@ class BalloonCrazy extends FlameGame
     if (session.activeBalloon?.id != balloon.domainId) return;
     session.missActive();
     lives.value = session.lives;
+    heldBalloons.value = session.held;
+    _showFeedback('MISS!');
     if (session.phase == SessionPhase.gameOver) {
       playState = PlayState.gameOver;
     } else {
       player.reset();
       spawnNextBalloon();
     }
+  }
+
+  void _showFeedback(String message) {
+    _feedbackTimer?.cancel();
+    feedback.value = message;
+    _feedbackTimer = async.Timer(
+      const Duration(milliseconds: 900),
+      _clearFeedback,
+    );
+  }
+
+  void _clearFeedback() {
+    _feedbackTimer = null;
+    feedback.value = null;
   }
 
   @override

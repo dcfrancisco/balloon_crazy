@@ -1,4 +1,5 @@
 import 'package:balloon_crazy/widgets/score_card.dart';
+import 'package:balloon_crazy/widgets/paused_overlay.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -17,13 +18,29 @@ class GameApp extends StatefulWidget {
   State<GameApp> createState() => _GameAppState();
 }
 
-class _GameAppState extends State<GameApp> {
+class _GameAppState extends State<GameApp> with WidgetsBindingObserver {
   late final BalloonCrazy game;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     game = BalloonCrazy();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused ||
+        state == AppLifecycleState.hidden) {
+      game.pauseGame();
+    }
   }
 
   @override
@@ -59,8 +76,43 @@ class _GameAppState extends State<GameApp> {
                           padding: EdgeInsets.only(left: 5.0),
                           child: GameTitle(),
                         ),
-                        ScoreCard(score: game.score, lives: game.lives),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              tooltip: 'Pause game',
+                              onPressed: game.pauseGame,
+                              icon: const Icon(Icons.pause_rounded),
+                              color: Colors.white,
+                            ),
+                            ScoreCard(
+                              score: game.score,
+                              lives: game.lives,
+                              held: game.heldBalloons,
+                            ),
+                          ],
+                        ),
                       ],
+                    ),
+                    SizedBox(
+                      height: 28,
+                      child: ValueListenableBuilder<String?>(
+                        valueListenable: game.feedback,
+                        builder: (context, message, _) => AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 180),
+                          child: message == null
+                              ? const SizedBox.shrink()
+                              : Text(
+                                  message,
+                                  key: ValueKey(message),
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                        ),
+                      ),
                     ),
                     Expanded(
                       child: FittedBox(
@@ -101,6 +153,11 @@ class _GameAppState extends State<GameApp> {
                                           game: game as BalloonCrazy,
                                         ),
                                       ),
+                                  'paused': (context, game) => SizedBox.expand(
+                                    child: PausedOverlay(
+                                      game: game as BalloonCrazy,
+                                    ),
+                                  ),
                                 },
                               );
                             },
