@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 import 'package:balloon_crazy/components/components.dart';
 import 'package:balloon_crazy/config.dart';
+import 'package:balloon_crazy/domain/game_session.dart';
 
 enum PlayState { welcome, playing, gameOver, won }
 
@@ -29,6 +30,7 @@ class BalloonCrazy extends FlameGame
   final ValueNotifier<int> score = ValueNotifier<int>(0);
   final ValueNotifier<int> lives = ValueNotifier<int>(4);
   final rand = math.Random();
+  late GameSession session;
 
   /// bankPenalty (BP) used by the original game's dynamic threshold (7 - BP)
   /// Default 0 for compatibility.
@@ -115,40 +117,8 @@ class BalloonCrazy extends FlameGame
     score.value = 0;
     lives.value = initialLives;
     playState = PlayState.playing;
-    final rows = gridRows;
-    final columns = gridColumns;
-
-    final balloonSize = Vector2(balloonWidth, balloonHeight);
-    final spacingX = horizontalSpacing;
-    final spacingY = verticalSpacing;
-
-    final totalGridWidth = columns * (balloonSize.x + spacingX) - spacingX;
-    final startX = ((gameWidth - totalGridWidth) / 2) + gridStartMargin;
-    final startY = gridStartY + gridStartYOffset;
-
-    balloonMatrix = List.generate(
-      columns,
-      (col) => List<Balloon?>.filled(rows, null),
-    );
-
-    for (int row = 0; row < rows; row++) {
-      for (int col = 0; col < columns; col++) {
-        final balloon = Balloon(
-          position: Vector2(
-            startX + col * (balloonSize.x + spacingX),
-            startY + row * (balloonSize.y + spacingY),
-          ),
-          size: balloonSize,
-          velocity: Vector2(0, 0),
-          rowIndex: row,
-          columnIndex: col,
-        );
-        world.add(balloon);
-        balloonMatrix[col][row] = balloon;
-      }
-    }
-
-    startDroppingBalloons();
+    session = GameSession(seed: rand.nextInt(1 << 31));
+    spawnNextBalloon();
   }
 
   void dropBalloon() {
@@ -162,6 +132,33 @@ class BalloonCrazy extends FlameGame
         break;
       }
     }
+  }
+
+  void spawnNextBalloon() {
+    session.startNext();
+    final selected = session.activeBalloon;
+    if (selected == null) {
+      final events = session.finishBoard();
+      for (final event in events) {
+        if (event is BankSettled) {
+          score.value += event.points;
+          player.clearHeldVisuals();
+        }
+      }
+      if (events.whereType<SessionFinished>().isNotEmpty) {
+        playState = PlayState.won;
+      }
+      return;
+    }
+    world.add(
+      Balloon(
+        position: Vector2(selected.x * gameWidth, 40),
+        size: Vector2(balloonWidth, balloonHeight),
+        velocity: Vector2(0, GameSession.baseSpeed),
+        rowIndex: selected.row,
+        columnIndex: selected.column,
+      ),
+    );
   }
 
   void startDroppingBalloons() {
@@ -193,14 +190,15 @@ class BalloonCrazy extends FlameGame
   }
 
   void onBalloonCaught(Balloon balloon) {
-    // Remove balloon from matrix
-    for (int col = 0; col < balloonMatrix.length; col++) {
-      for (int row = 0; row < balloonMatrix[col].length; row++) {
-        if (balloonMatrix[col][row] == balloon) {
-          balloonMatrix[col][row] = null;
-          break;
-        }
+    final events = session.catchActive();
+    for (final event in events) {
+      if (event is BankSettled) {
+        score.value += event.points;
+        player.clearHeldVisuals();
       }
+    }
+    if (session.activeBalloon == null && session.phase == SessionPhase.playing) {
+      spawnNextBalloon();
     }
   }
 
@@ -305,12 +303,13 @@ class BalloonCrazy extends FlameGame
   }
 
   void onLoseLife() {
-    lives.value--;
-    if (lives.value <= 0) {
+    session.missActive();
+    lives.value = session.lives;
+    if (session.phase == SessionPhase.gameOver) {
       playState = PlayState.gameOver;
-      balloonDropTimer.removeFromParent();
     } else {
       player.reset();
+      spawnNextBalloon();
     }
   }
 

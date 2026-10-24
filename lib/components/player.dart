@@ -52,22 +52,20 @@ class Player extends SpriteComponent
   void catchBalloon(Balloon balloon) {
     balloon.removeFromParent();
     heldBalloons++;
-    game.score.value += 10;
 
     // Notify game that balloon was caught
     game.onBalloonCaught(balloon);
 
-    // Increase SP (difficulty) in game
-    game.increaseSP(0.5);
-
     // Add visual balloon above player
     _addVisualBalloon();
-    // Check for automatic banking threshold. Use BP from game.
-    final bp = game.bankPenalty;
-    final threshold = (7 - bp);
-    if (heldBalloons >= threshold) {
-      bank();
+  }
+
+  void clearHeldVisuals() {
+    heldBalloons = 0;
+    for (final sprite in heldBalloonSprites) {
+      sprite.removeFromParent();
     }
+    heldBalloonSprites.clear();
   }
 
   void _addVisualBalloon() async {
@@ -77,6 +75,9 @@ class Player extends SpriteComponent
       position: Vector2(0, -visualBalloonYOffset * heldBalloons),
       anchor: Anchor.center,
     );
+    // A bank can settle while the asset is loading. Do not resurrect a
+    // visual balloon after the domain has cleared the held stack.
+    if (heldBalloons == 0 || !isMounted) return;
     add(balloonSprite);
     heldBalloonSprites.add(balloonSprite);
   }

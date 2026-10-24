@@ -24,13 +24,13 @@ Exit: no placeholder identity and no unknown-rights production asset. If title/s
 
 Exit: fresh checkout to successful checks/debug run in under 15 minutes.
 
-## Gate 2 — deterministic playable core (3–5 days)
+## Gate 2 — deterministic playable core (3–5 days) — in progress
 
-- Implement `Ruleset`, immutable `GameSession`, commands, events, clock/random ports, and invariants.
+- Implement `Ruleset`, immutable `GameSession`, commands, events, clock/random ports, and invariants. The first dependency-free rules engine is in `lib/domain/game_session.dart`; its presentation projection is still pending.
 - Cover all gameplay-spec examples, seeded full win/loss, pause, restart isolation, and race candidates.
 - Keep presentation out; simulations must run with plain Dart tests.
 
-Exit: 100 deterministic seeded simulations complete without invariant violation and no Flutter/Flame dependency in domain tests.
+Exit: 100 deterministic seeded simulations complete without invariant violation and no Flutter/Flame dependency in domain tests. The exit is not yet claimed until the Flame shell consumes the engine events.
 
 ## Gate 3 — vertical slice and controls (3–5 days)
 

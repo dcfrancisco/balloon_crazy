@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased (0.1.x)
+
+- Added the dependency-free deterministic `GameSession` rules core for Gate 2.
+- Added seeded selection, catch/miss, held-stack banking, pause, and terminal
+  outcome tests without changing the existing visual assets.
+- Recorded ADR 0006 and marked the presentation projection as the remaining
+  Gate 2 task.
+
 All notable product and release changes will be documented here.
 
 ## 0.1.0+1 — Pre-recovery baseline — 2026-10-25
