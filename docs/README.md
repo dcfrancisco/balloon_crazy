@@ -10,7 +10,9 @@ This directory is the decision and delivery baseline for turning the current pro
 4. [Recovery and release plan](release-readiness-plan.md) — staged backlog and release gates.
 5. [Asset plan](asset-plan.md) — existing asset disposition and sprite brief.
 6. [Plugins and dependencies](plugins-and-dependencies.md) — what to keep, add, defer, or avoid.
-7. [Architecture decision records](adr/) — durable decisions and their consequences.
+7. [Version 2 proposal](version-2-proposal.md) — product direction and storyboard.
+8. [Version 2 game design](version-2-game-design.md) — mechanics, sprites, objectives, levels, difficulty, and build plan.
+9. [Architecture decision records](adr/) — durable decisions and their consequences.
 
 ## Decision status
 

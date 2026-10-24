@@ -4,6 +4,8 @@ Status: proposed
 Date: 2026-10-25  
 Target: post-`1.0.0` exploration; no Version 1 gameplay or release scope changes
 
+The detailed game design is in [Version 2 Game Design](version-2-game-design.md). This proposal remains the product boundary summary; the game-design document contains the playable rules, sprite roster, objectives, levels, difficulty curve, and acceptance criteria.
+
 ## Source direction
 
 The supplied concept screens describe a larger, more colorful progression game while keeping the original Balloon Crazy fantasy: a small character catches a growing stack of balloons. The visual direction is polished mobile arcade: rounded blue panels, bright balloon colors, scenic backgrounds, large readable controls, and a clear score/lives HUD.
@@ -68,4 +70,3 @@ The player starts at the Balloon Crazy home screen, chooses a mode, learns the m
 - What does a power-up do, and how long does it last?
 - Are lives still represented by the player icons, or should V2 use hearts?
 - Is Multiplayer a real requirement or only a future menu placeholder?
-
