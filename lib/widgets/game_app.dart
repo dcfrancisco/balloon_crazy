@@ -76,43 +76,8 @@ class _GameAppState extends State<GameApp> with WidgetsBindingObserver {
                           padding: EdgeInsets.only(left: 5.0),
                           child: GameTitle(),
                         ),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              tooltip: 'Pause game',
-                              onPressed: game.pauseGame,
-                              icon: const Icon(Icons.pause_rounded),
-                              color: Colors.white,
-                            ),
-                            ScoreCard(
-                              score: game.score,
-                              lives: game.lives,
-                              held: game.heldBalloons,
-                            ),
-                          ],
-                        ),
+                        ScoreCard(score: game.score, lives: game.lives),
                       ],
-                    ),
-                    SizedBox(
-                      height: 28,
-                      child: ValueListenableBuilder<String?>(
-                        valueListenable: game.feedback,
-                        builder: (context, message, _) => AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 180),
-                          child: message == null
-                              ? const SizedBox.shrink()
-                              : Text(
-                                  message,
-                                  key: ValueKey(message),
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                        ),
-                      ),
                     ),
                     Expanded(
                       child: FittedBox(
@@ -126,39 +91,113 @@ class _GameAppState extends State<GameApp> with WidgetsBindingObserver {
                                 game.widgetRenderWidth = constraints.maxWidth;
                                 game.widgetRenderHeight = constraints.maxHeight;
                               });
-                              return GameWidget(
-                                game: game,
-                                overlayBuilderMap: {
-                                  PlayState.welcome.name: (context, game) =>
-                                      SizedBox.expand(
-                                        child: WelcomeLeaderboard(
-                                          game: game as BalloonCrazy,
-                                        ),
-                                      ),
-                                  PlayState.gameOver.name: (context, game) =>
-                                      GestureDetector(
-                                        behavior: HitTestBehavior.opaque,
-                                        onTap: () =>
-                                            (game as BalloonCrazy).startGame(),
-                                        child: const SizedBox.expand(
-                                          child: OverlayScreen(
-                                            title: 'G A M E   O V E R',
-                                            subtitle: 'Tap to Play Again',
+                              return Stack(
+                                fit: StackFit.expand,
+                                children: [
+                                  GameWidget(
+                                    game: game,
+                                    overlayBuilderMap: {
+                                      PlayState.welcome.name: (context, game) =>
+                                          SizedBox.expand(
+                                            child: WelcomeLeaderboard(
+                                              game: game as BalloonCrazy,
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                                  PlayState.won.name: (context, game) =>
-                                      SizedBox.expand(
-                                        child: WonPrompt(
-                                          game: game as BalloonCrazy,
-                                        ),
-                                      ),
-                                  'paused': (context, game) => SizedBox.expand(
-                                    child: PausedOverlay(
-                                      game: game as BalloonCrazy,
+                                      PlayState.gameOver.name:
+                                          (context, game) => GestureDetector(
+                                            behavior: HitTestBehavior.opaque,
+                                            onTap: () => (game as BalloonCrazy)
+                                                .startGame(),
+                                            child: const SizedBox.expand(
+                                              child: OverlayScreen(
+                                                title: 'G A M E   O V E R',
+                                                subtitle: 'Tap to Play Again',
+                                              ),
+                                            ),
+                                          ),
+                                      PlayState.won.name: (context, game) =>
+                                          SizedBox.expand(
+                                            child: WonPrompt(
+                                              game: game as BalloonCrazy,
+                                            ),
+                                          ),
+                                      'paused': (context, game) =>
+                                          SizedBox.expand(
+                                            child: PausedOverlay(
+                                              game: game as BalloonCrazy,
+                                            ),
+                                          ),
+                                    },
+                                  ),
+                                  Positioned(
+                                    top: 12,
+                                    right: 12,
+                                    child: IconButton(
+                                      tooltip: 'Pause game',
+                                      onPressed: game.pauseGame,
+                                      icon: const Icon(Icons.pause_rounded),
+                                      color: Colors.white,
                                     ),
                                   ),
-                                },
+                                  Positioned(
+                                    top: 16,
+                                    left: 16,
+                                    child: ValueListenableBuilder<int>(
+                                      valueListenable: game.heldBalloons,
+                                      builder: (context, held, _) => held == 0
+                                          ? const SizedBox.shrink()
+                                          : DecoratedBox(
+                                              decoration: BoxDecoration(
+                                                color: Colors.black45,
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                              ),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 6,
+                                                    ),
+                                                child: Text(
+                                                  'STACK: $held',
+                                                  style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 58,
+                                    left: 0,
+                                    right: 0,
+                                    child: ValueListenableBuilder<String?>(
+                                      valueListenable: game.feedback,
+                                      builder: (context, message, _) =>
+                                          AnimatedSwitcher(
+                                            duration: const Duration(
+                                              milliseconds: 180,
+                                            ),
+                                            child: message == null
+                                                ? const SizedBox.shrink()
+                                                : Center(
+                                                    child: Text(
+                                                      message,
+                                                      key: ValueKey(message),
+                                                      style: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 16,
+                                                      ),
+                                                    ),
+                                                  ),
+                                          ),
+                                    ),
+                                  ),
+                                ],
                               );
                             },
                           ),
