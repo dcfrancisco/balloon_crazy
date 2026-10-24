@@ -8,8 +8,6 @@ plugins {
 android {
     namespace = "com.example.balloon_crazy"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
