@@ -10,22 +10,29 @@ class Pop extends SpriteComponent with HasGameReference<BalloonCrazy> {
   Future<void> onLoad() async {
     super.onLoad();
 
-    // Load the balloon_pop.png sprite sheet (3x2 grid)
+    // balloon_pop.png is a single-row, three-frame strip.
     final image = await game.images.load('balloon_pop.png');
     final spriteSheet = SpriteSheet(
       image: image,
-      srcSize: Vector2(image.width / 3, image.height / 2), // 3 columns, 2 rows
+      srcSize: Vector2(image.width.toDouble() / 3, image.height.toDouble()),
     );
 
-    // Get the red balloon from row 1 (second row), column 0
-    sprite = spriteSheet.getSprite(1, 0);
+    var frame = 0;
+    sprite = spriteSheet.getSprite(0, frame);
 
-    // Remove the pop animation after a short duration
+    // Play each authored frame once, then remove the effect.
     add(
       TimerComponent(
-        period: 0.3,
-        removeOnFinish: true,
-        onTick: () => removeFromParent(),
+        period: 0.1,
+        repeat: true,
+        onTick: () {
+          frame++;
+          if (frame >= 3) {
+            removeFromParent();
+            return;
+          }
+          sprite = spriteSheet.getSprite(0, frame);
+        },
       ),
     );
   }

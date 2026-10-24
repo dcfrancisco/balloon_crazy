@@ -1,0 +1,53 @@
+# Changelog
+
+## 1.0.0+3 — GitHub Android APK
+
+- Changed release scope to an Android-only downloadable GitHub APK; iOS and
+  app-store gates are cancelled by ADR 0009.
+
+- Started Gate 4 Pass 1: added a visible held-balloon stack, catch/miss/bank
+  feedback, and Android lifecycle-safe pause/resume behavior without changing
+  the canonical rules or adding production assets.
+- Restored the visible four-row, fifteen-balloon board field as presentation
+  sprites while retaining one authoritative falling/colliding balloon.
+- Completed Gate 4 Pass 1's offline playable loop; device validation and store
+  hardening remain before the next release gate.
+- Corrected the balloon pop effect to use its actual three-frame horizontal
+  sprite strip instead of an invalid second-row frame.
+- Added a six-frame `player_fall_sheet.png` derived from the original BASIC
+  `FALL` object and documented its provenance for the miss animation.
+- Integrated the fall strip into the miss flow with the original rightward
+  zig-zag and upward-exit movement before the next life or result screen.
+- Regenerated the fall strip from the canonical `player.png` character so
+  catch and miss states use one consistent player design.
+
+- Added the dependency-free deterministic `GameSession` rules core for Gate 2.
+- Added seeded selection, catch/miss, held-stack banking, pause, and terminal
+  outcome tests without changing the existing visual assets.
+- Recorded ADR 0006 and formalized the Gate 2 projection contract.
+- Completed the first Flame projection: one active balloon, canonical catch,
+  bank, miss, and terminal transitions now use the rules engine.
+- Gate 3 implementation: added fixed-viewport touch mapping with letterbox
+  handling and swept balloon/player/floor crossing detection.
+- Added automated mapping and large-frame collision regression tests. Physical
+  device playtesting remains the final Gate 3 exit requirement.
+
+All notable product and release changes will be documented here.
+
+## 0.1.0+1 — Pre-recovery baseline — 2026-10-25
+
+- Preserved the existing Flutter/Flame prototype before recovery implementation.
+- Established canonical Original Inspired v1 gameplay rules and product boundaries.
+- Accepted ADRs for deterministic architecture, mobile release gates, asset/dependency policy, and versioning.
+- Recorded current blockers: incompatible/broken local Flutter toolchain, missing lockfile/CI, placeholder store identity/signing, inconsistent rules/tests, and incomplete asset provenance.
+- No gameplay implementation or new production sprites are included in this baseline.
+
+## Unreleased — Gate 1 technical baseline
+
+- Pinned Flutter 3.35.7 stable and bundled Dart 3.9.x through `.fvmrc`, project constraints, and CI; compatible with the current macOS 12 host.
+- Added the resolved `pubspec.lock` and replaced the generated counter test with game welcome/overlay smoke coverage.
+- Pinned CI Android builds to Java 17 for Gradle/AGP compatibility.
+- Added `./tool/verify.sh` for dependency resolution, formatting, analysis, tests, and Android debug verification.
+- Added minimal GitHub Actions verification.
+- Recorded the local Xcode 14.2 limitation as an environment-only iOS release blocker.
+- No gameplay rules, visual design, or production assets changed.

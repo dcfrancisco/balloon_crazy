@@ -1,21 +1,20 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flame/game.dart';
-
-import 'package:balloon_crazy/balloon_crazy.dart';
+import 'package:balloon_crazy/widgets/game_app.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Create the game instance
-    final game = BalloonCrazy();
+  testWidgets('game app shows the welcome screen', (WidgetTester tester) async {
+    await tester.pumpWidget(const GameApp());
+    // The game loads fonts, assets, and the presentation board asynchronously.
+    // Advance a bounded amount of simulated time so this remains a real
+    // welcome-screen assertion without depending on a single frame race.
+    for (
+      var attempt = 0;
+      attempt < 20 && find.text('TAP TO PLAY').evaluate().isEmpty;
+      attempt++
+    ) {
+      await tester.pump(const Duration(milliseconds: 250));
+    }
 
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(GameWidget(game: game));
-
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    // Note: You need to add the actual tap action and verification here based on your game's implementation.
+    expect(find.text('TAP TO PLAY'), findsOneWidget);
   });
 }
