@@ -5,12 +5,12 @@ void main() {
   testWidgets('welcome overlay shows and starts game on tap', (tester) async {
     await tester.pumpWidget(const GameApp());
 
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(milliseconds: 500));
 
     expect(find.text('TAP TO PLAY'), findsOneWidget);
 
     await tester.tap(find.text('TAP TO PLAY'));
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(milliseconds: 500));
 
     expect(find.text('TAP TO PLAY'), findsNothing);
   });
