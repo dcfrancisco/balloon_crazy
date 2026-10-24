@@ -15,9 +15,7 @@ class _FakeGame extends BalloonCrazy {
 void main() {
   testWidgets('welcome overlay shows and starts game on tap', (tester) async {
     final game = _FakeGame();
-    await tester.pumpWidget(
-      MaterialApp(home: WelcomeLeaderboard(game: game)),
-    );
+    await tester.pumpWidget(MaterialApp(home: WelcomeLeaderboard(game: game)));
 
     await tester.pump(const Duration(milliseconds: 500));
 
