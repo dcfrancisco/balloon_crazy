@@ -7,11 +7,11 @@
 
 ![Balloon Crazy](assets/BalloonCrazy.png)
 
-## Work in Progress
+## Recovery status
 
-🚧 **This project is still a work in progress.** 🚧
+🚧 **This project is a pre-alpha prototype under a documentation-led recovery.** 🚧
 
-We are actively working on adding new features, improving gameplay mechanics, and fixing bugs. Stay tuned for updates!
+The approved scope, gameplay contract, architecture decisions, asset plan, and release gates are indexed in [`docs/README.md`](docs/README.md). The current runtime does not yet implement that contract; implementation intentionally follows the documented gates rather than adding features.
 
 ## Game Mechanics
 
@@ -19,33 +19,25 @@ We are actively working on adding new features, improving gameplay mechanics, an
 The main objective is to catch falling balloons by positioning the player character underneath them. You must balance on a skateboard and collect a specific number of balloons to score points and advance to the next level.
 
 ### Gameplay
-1. **Movement**: 
-   - Use the on-screen controls or keyboard to move your player left and right across the screen.
+1. **Movement**:
+   - Drag horizontally to position the skater beneath the falling balloon.
 
-2. **Catching Balloons**: 
-   - Balloons fall from the top of the screen in different colors and speeds:
-     - **Blue balloons** fall slowly and are worth the fewest points.
-     - **Green balloons** fall faster and are worth more points.
-     - **Red balloons** fall the fastest and are worth the most points.
-   - Position the player directly under a falling balloon to catch it on top of their head.
+2. **Catching Balloons**:
+   - One red balloon falls at a time from the active row.
+   - Position the player directly beneath it. Each catch adds to the visible stack, raises the catch point, and makes the next drop faster.
 
-3. **Scoring**:
-   - Points are scored based on the type of balloon caught:
-     - Blue balloon = 10 points
-     - Green balloon = 20 points
-     - Red balloon = 30 points.
-   - Points are added to your score only when a required number of balloons are caught and you pop them by pressing the fire button or a specific key.
+3. **Banking and scoring**:
+   - Caught balloons are unbanked and do not score immediately.
+   - Banking triggers automatically at tier thresholds of 4, 5, 6, and 7 balloons.
+   - Each banked balloon awards 10 points. A miss loses the entire unbanked stack.
 
-4. **Bouncing Balloons**:
-   - If you miss a balloon, you have a chance to bounce it back into the air by holding down the fire button (or space bar) and running into the balloon, allowing you to attempt catching it again.
-   - This mechanic is available in some, but not all, versions of the game.
+4. **Board progression**:
+   - Clear four rows of fifteen balloons, beginning with the lowest row and moving upward.
+   - The first release contains one finite board, not multiple levels.
 
-5. **Levels**:
-   - Clearing all balloons from a screen lets you advance to the next level, where gameplay becomes more challenging with faster and more frequent falling balloons.
-   - You gain extra players or "lives" when you reach certain score thresholds or complete levels, depending on the version.
-
-6. **Game Over**:
-   - The game ends if you lose all three players by missing balloons and falling off the skateboard.
+5. **Lives and endings**:
+   - You start with four lives. A miss costs one life and clears the unbanked stack.
+   - Clear all 60 balloons to win; lose all four lives for game over. Both outcomes can enter the local leaderboard.
 
 ## Installation
 
@@ -65,7 +57,7 @@ To run this Flutter project, follow these steps:
    ```
 
 3. **Run the app**:
-   
+
    ```sh
    flutter run
    ```
@@ -80,7 +72,7 @@ The original source code for Balloon Crazy, as typed in from page 59 of the Dece
 The original source code and detailed game description are from the December 1985 issue of COMPUTE! magazine. Here's the citation:
 
 - Joseph Russ, "Balloon Crazy," [COMPUTE! Magazine, Issue 67, December 1985](https://archive.org/embed/1985-12-compute-magazine). Available online at [AtariMagazines.com](https://www.atarimagazines.com/compute/issue67/305_1_BALLOON_CRAZY.php).
-  
+
 Enjoy the delightful and challenging world of Balloon Crazy! Catch those balloons, score high, and become the ultimate Balloon Crazy champion!
 
 ## License
@@ -89,22 +81,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Fonts / Attributions
 
-This project uses the following fonts. The full license texts are included in the repository under `assets/fonts/`.
+The prototype references the following fonts. The README previously claimed that full license files were included, but those files are not currently tracked. This is a release blocker recorded in [`docs/asset-plan.md`](docs/asset-plan.md); do not distribute the fonts until their exact source and license are verified and added.
 
-- DigitalReadout — included in `assets/fonts/`.
-   - License file: `assets/fonts/LICENSE_DigitalReadout.txt`
-   - Please consult the license text in the repository for attribution/usage details.
+- DigitalReadout — font binaries are currently present; provenance/license verification is pending.
 
-- Press Start 2P — provided by Google Fonts and used via `google_fonts` for the game title and UI.
-   - License: SIL Open Font License (OFL 1.1)
-   - License file included: `assets/fonts/LICENSE_PressStart2P.txt`
+- Press Start 2P — currently requested through `google_fonts`; the recovery plan requires a verified, bundled production font.
 
-Suggested in-app attribution (copyable):
-
-```
-Fonts:
-- DigitalReadout — included with this app (see assets/fonts/LICENSE_DigitalReadout.txt)
-- Press Start 2P — Google Fonts, SIL Open Font License (OFL 1.1) (see assets/fonts/LICENSE_PressStart2P.txt)
-```
-
-If you distributed these fonts from another source, please replace the filenames and license texts above with the actual files and attribution required by the font authors.
+Final in-app attribution will be generated from the verified asset provenance ledger before public release.

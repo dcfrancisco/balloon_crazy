@@ -1,6 +1,8 @@
 ````markdown
 # 🎮 BALLOON CRAZY - Original Gameplay Reference
 
+> **Historical research, not the implementation contract.** This document contains known interpretation errors, including catch scoring and row-order wording. Use `docs/gameplay-rules-v1.md` and accepted ADRs for the recovery implementation.
+
 ## Overview
 This document details the gameplay mechanics from the original 1980s BALLOON.BAS game to serve as a reference for implementation.
 
