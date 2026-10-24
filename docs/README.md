@@ -22,6 +22,7 @@ This directory is the decision and delivery baseline for turning the current pro
 | [0004](adr/0004-asset-and-dependency-policy.md) | Accepted for recovery | Curated, licensed assets and a minimal dependency surface |
 | [0005](adr/0005-release-versioning.md) | Accepted | Pre-1.0 milestones, monotonic builds, and immutable release tags |
 | [0006](adr/0006-deterministic-rules-engine-and-gate-progression.md) | Accepted | Deterministic rules engine before presentation expansion |
+| [0007](adr/0007-fixed-viewport-and-swept-collision.md) | Accepted | Fixed-viewport input and swept vertical collision |
 
 ## Authority order
 

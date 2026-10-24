@@ -32,14 +32,19 @@ Exit: fresh checkout to successful checks/debug run in under 15 minutes.
 
 Exit: deterministic seeded rules tests pass without invariant violation and no Flutter/Flame dependency in domain tests. The full 100-run soak remains a Gate 3 hardening task.
 
-## Gate 3 — vertical slice and controls (3–5 days) — next
+## Gate 3 — vertical slice and controls (3–5 days) — implementation complete; device validation pending
 
-- Project domain snapshots into Flame with stable entity IDs.
-- Implement one balloon, stack/player height, input transform, swept catch/miss detection, row progression, bank, and result.
-- Test small/tall phone and tablet letterbox coordinate mapping.
-- Conduct five-person first-play test using existing art.
+- Project the domain's active balloon into Flame with stable entity IDs.
+- Implement one balloon, stack/player height, fixed-viewport input mapping,
+  swept catch/miss detection, row progression, bank, and result.
+- Cover small/tall phone and tablet letterbox coordinate mapping and large
+  frame collision crossings with automated tests.
+- Conduct five-person first-play testing using existing art on physical devices.
 
-Exit: five consecutive full physical-device sessions without stale state; at least four of five players can explain bank risk after one play.
+Implementation exit: automated mapping/collision tests pass and the Android
+debug artifact builds. Final Gate 3 exit remains five consecutive full
+physical-device sessions without stale state; at least four of five players
+must explain bank risk after one play.
 
 ## Gate 4 — game feel, local product, and assets (3–5 days)
 

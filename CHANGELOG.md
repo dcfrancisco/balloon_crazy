@@ -8,6 +8,10 @@
 - Recorded ADR 0006 and formalized the Gate 2 projection contract.
 - Completed the first Flame projection: one active balloon, canonical catch,
   bank, miss, and terminal transitions now use the rules engine.
+- Gate 3 implementation: added fixed-viewport touch mapping with letterbox
+  handling and swept balloon/player/floor crossing detection.
+- Added automated mapping and large-frame collision regression tests. Physical
+  device playtesting remains the final Gate 3 exit requirement.
 
 All notable product and release changes will be documented here.
 

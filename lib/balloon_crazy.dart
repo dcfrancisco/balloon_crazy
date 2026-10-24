@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:balloon_crazy/components/components.dart';
 import 'package:balloon_crazy/config.dart';
 import 'package:balloon_crazy/domain/game_session.dart';
+import 'package:balloon_crazy/domain/swept_collision.dart';
+import 'package:balloon_crazy/input/game_coordinate_mapper.dart';
 
 enum PlayState { welcome, playing, gameOver, won }
 
@@ -40,6 +42,10 @@ class BalloonCrazy extends FlameGame
   double? lastWidgetX;
   double widgetRenderWidth = 0.0;
   double widgetRenderHeight = 0.0;
+  final coordinateMapper = const GameCoordinateMapper(
+    worldWidth: gameWidth,
+    worldHeight: gameHeight,
+  );
 
   late PlayState _playState = PlayState.welcome;
   PlayState get playState => _playState;
@@ -139,6 +145,7 @@ class BalloonCrazy extends FlameGame
         position: Vector2(selected.x * gameWidth, 40),
         size: Vector2(balloonWidth, balloonHeight),
         velocity: Vector2(0, GameSession.baseSpeed),
+        domainId: selected.id,
         rowIndex: selected.row,
         columnIndex: selected.column,
       ),
@@ -146,6 +153,7 @@ class BalloonCrazy extends FlameGame
   }
 
   void onBalloonCaught(Balloon balloon) {
+    if (session.activeBalloon?.id != balloon.domainId) return;
     final events = session.catchActive();
     for (final event in events) {
       if (event is BankSettled) {
@@ -156,6 +164,42 @@ class BalloonCrazy extends FlameGame
     if (session.activeBalloon == null && session.phase == SessionPhase.playing) {
       spawnNextBalloon();
     }
+  }
+
+  bool balloonCrossedPlayer(
+    Balloon balloon, {
+    required double previousY,
+    required double nextY,
+  }) {
+    return sweptVerticalCatch(
+      previousY: previousY,
+      nextY: nextY,
+      objectHeight: balloon.size.y,
+      objectX: balloon.position.x,
+      objectWidth: balloon.size.x,
+      targetY: player.position.y,
+      targetHeight: player.size.y,
+      targetX: player.position.x,
+      targetWidth: player.size.x,
+    );
+  }
+
+  bool balloonCrossedFloor(
+    Balloon balloon, {
+    required double previousY,
+    required double nextY,
+  }) {
+    return sweptVerticalCatch(
+      previousY: previousY,
+      nextY: nextY,
+      objectHeight: balloon.size.y,
+      objectX: balloon.position.x,
+      objectWidth: balloon.size.x,
+      targetY: playArea.floor.position.y + playArea.floor.size.y / 2,
+      targetHeight: playArea.floor.size.y,
+      targetX: playArea.floor.position.x + playArea.floor.size.x / 2,
+      targetWidth: playArea.floor.size.x,
+    );
   }
 
   /// Increase the current SP by [delta]. This affects how strictly we check
@@ -180,85 +224,51 @@ class BalloonCrazy extends FlameGame
   @override
   void onPanUpdate(DragUpdateInfo info) {
     if (playState == PlayState.playing) {
-      // store widget-x for diagnostics
-      final widgetX = info.eventPosition.widget.x;
-      lastWidgetX = widgetX;
-
-      // If we know the rendered GameWidget width, compute a proportional
-      // mapping from widget X -> world X so touches map across the full
-      // gameWidth regardless of layout scaling (FittedBox, etc.).
-      double worldX;
-      if (widgetRenderWidth > 0) {
-        final ratio = (widgetX / widgetRenderWidth).clamp(0.0, 1.0);
-        worldX = ratio * gameWidth;
-      } else {
-        // Fallback to camera mapping if render size isn't available yet.
-        final worldPos = camera.viewfinder.globalToLocal(
-          info.eventPosition.global,
-        );
-        worldX = worldPos.x;
-      }
-
-      lastWorldX = worldX;
-
-      // Immediate movement: set player position directly to follow finger
-      final minX = player.size.x / 2;
-      final maxX = gameWidth - player.size.x / 2;
-      final newX = worldX.clamp(minX, maxX);
-      player.targetX = newX;
-      player.position.x = newX;
+      _movePlayerToWidgetPoint(
+        info.eventPosition.widget.x,
+        info.eventPosition.widget.y,
+      );
     }
   }
 
   @override
   void onPanStart(DragStartInfo info) {
     if (playState == PlayState.playing) {
-      final widgetX = info.eventPosition.widget.x;
-      lastWidgetX = widgetX;
-
-      double worldX;
-      if (widgetRenderWidth > 0) {
-        final ratio = (widgetX / widgetRenderWidth).clamp(0.0, 1.0);
-        worldX = ratio * gameWidth;
-      } else {
-        final worldPos = camera.viewfinder.globalToLocal(
-          info.eventPosition.global,
-        );
-        worldX = worldPos.x;
-      }
-
-      lastWorldX = worldX;
-      // immediate set to test movement responsiveness
-      player.targetX = worldX;
-      player.position.x = worldX;
+      _movePlayerToWidgetPoint(
+        info.eventPosition.widget.x,
+        info.eventPosition.widget.y,
+      );
     }
   }
 
   @override
   void onTapDown(TapDownInfo info) {
     if (playState == PlayState.playing) {
-      final widgetX = info.eventPosition.widget.x;
-      lastWidgetX = widgetX;
-
-      double worldX;
-      if (widgetRenderWidth > 0) {
-        final ratio = (widgetX / widgetRenderWidth).clamp(0.0, 1.0);
-        worldX = ratio * gameWidth;
-      } else {
-        final worldPos = camera.viewfinder.globalToLocal(
-          info.eventPosition.global,
-        );
-        worldX = worldPos.x;
-      }
-
-      lastWorldX = worldX;
-      // immediate set when tapping
-      player.targetX = worldX;
-      player.position.x = worldX;
+      _movePlayerToWidgetPoint(
+        info.eventPosition.widget.x,
+        info.eventPosition.widget.y,
+      );
     }
   }
 
-  void onLoseLife() {
+  void _movePlayerToWidgetPoint(double widgetX, double widgetY) {
+    lastWidgetX = widgetX;
+    final worldPoint = coordinateMapper.worldPoint(
+      widgetX: widgetX,
+      widgetY: widgetY,
+      renderWidth: widgetRenderWidth,
+      renderHeight: widgetRenderHeight,
+    );
+    final minX = player.size.x / 2;
+    final maxX = gameWidth - player.size.x / 2;
+    final worldX = worldPoint.x.clamp(minX, maxX);
+    lastWorldX = worldX;
+    player.targetX = worldX;
+    player.position.x = worldX;
+  }
+
+  void onBalloonMissed(Balloon balloon) {
+    if (session.activeBalloon?.id != balloon.domainId) return;
     session.missActive();
     lives.value = session.lives;
     if (session.phase == SessionPhase.gameOver) {
