@@ -30,7 +30,10 @@ echo "== Dependencies =="
 $flutter_bin pub get
 
 echo "== Formatting =="
-"$dart_bin" format --output=none --set-exit-if-changed lib test
+if ! "$dart_bin" format --output=none --set-exit-if-changed lib test; then
+  "$dart_bin" format --output=show lib/widgets/overlay_screen.dart
+  exit 1
+fi
 
 echo "== Static analysis =="
 $flutter_bin analyze
