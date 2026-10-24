@@ -5,6 +5,8 @@
 - Started Gate 4 Pass 1: added a visible held-balloon stack, catch/miss/bank
   feedback, and Android lifecycle-safe pause/resume behavior without changing
   the canonical rules or adding production assets.
+- Restored the visible four-row, fifteen-balloon board field as presentation
+  sprites while retaining one authoritative falling/colliding balloon.
 
 - Added the dependency-free deterministic `GameSession` rules core for Gate 2.
 - Added seeded selection, catch/miss, held-stack banking, pause, and terminal

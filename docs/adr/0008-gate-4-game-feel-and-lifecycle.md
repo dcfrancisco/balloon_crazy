@@ -22,6 +22,8 @@ Use the existing sprites and rules to add a small game-feel layer:
 - pause automatically when Android sends the app to an inactive/background
   lifecycle state;
 - keep the canonical score, lives, thresholds, and progression unchanged.
+- restore the four-row board field as non-interactive presentation sprites;
+  only the domain-selected active balloon can collide or score.
 
 Production sprite, audio, haptics, and monetization work remain later Gate 4
 items and require their own asset/provenance review.

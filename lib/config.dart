@@ -3,7 +3,7 @@ const gameHeight = 1600.0;
 
 // Balloons / grid
 const gridRows = 4;
-const gridColumns = 10;
+const gridColumns = 15;
 const balloonWidth = 55.0;
 const balloonHeight = 55.0;
 const horizontalSpacing = 20.0;

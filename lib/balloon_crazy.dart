@@ -17,6 +17,7 @@ enum PlayState { welcome, playing, gameOver, won }
 class BalloonCrazy extends FlameGame
     with HasCollisionDetection, TapDetector, PanDetector {
   late final Player player;
+  late final BalloonField balloonField;
   late PlayArea playArea;
 
   BalloonCrazy()
@@ -59,6 +60,7 @@ class BalloonCrazy extends FlameGame
       case PlayState.welcome:
         overlays.remove('paused');
         overlays.add(playState.name);
+        balloonField.visible = false;
         // hide floor and player on welcome
         playArea.floor.visible = false;
         playArea.player.opacity = 0;
@@ -66,6 +68,7 @@ class BalloonCrazy extends FlameGame
       case PlayState.gameOver:
         overlays.remove('paused');
         overlays.add(playState.name);
+        balloonField.visible = false;
         // hide world during game over
         // Keep the player visible during the game over overlay so the
         // final held balloons are shown. The floor remains hidden to
@@ -76,6 +79,7 @@ class BalloonCrazy extends FlameGame
       case PlayState.won:
         overlays.remove('paused');
         overlays.add(playState.name);
+        balloonField.visible = false;
         // On win, keep the player visible (don't hide) and show floor so
         // the final state feels anchored; clear held balloons to avoid
         // leftover visuals.
@@ -122,6 +126,9 @@ class BalloonCrazy extends FlameGame
     // Wait for playArea to initialize
     await playArea.loaded;
 
+    balloonField = BalloonField();
+    world.add(balloonField);
+
     // Add player and floor directly to world (same level as balloons)
     player = playArea.player;
     world.add(player);
@@ -140,6 +147,8 @@ class BalloonCrazy extends FlameGame
     world.removeAll(world.children.query<Balloon>());
 
     playArea.resetGame();
+    balloonField.reset();
+    balloonField.visible = true;
     score.value = 0;
     lives.value = initialLives;
     heldBalloons.value = 0;
@@ -166,6 +175,7 @@ class BalloonCrazy extends FlameGame
       }
       return;
     }
+    balloonField.removeBalloon(row: selected.row, column: selected.column);
     world.add(
       Balloon(
         position: Vector2(selected.x * gameWidth, 40),
