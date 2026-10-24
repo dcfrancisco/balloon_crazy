@@ -293,6 +293,7 @@ class BalloonCrazy extends FlameGame
   }
 
   void _movePlayerToWidgetPoint(double widgetX, double widgetY) {
+    if (player.isMissAnimating) return;
     lastWidgetX = widgetX;
     final worldPoint = coordinateMapper.worldPoint(
       widgetX: widgetX,
@@ -314,12 +315,17 @@ class BalloonCrazy extends FlameGame
     lives.value = session.lives;
     heldBalloons.value = session.held;
     _showFeedback('MISS!');
-    if (session.phase == SessionPhase.gameOver) {
-      playState = PlayState.gameOver;
-    } else {
-      player.reset();
-      spawnNextBalloon();
-    }
+    final isGameOver = session.phase == SessionPhase.gameOver;
+    player.playMissAnimation(
+      onComplete: () {
+        if (isGameOver) {
+          playState = PlayState.gameOver;
+        } else {
+          player.reset();
+          spawnNextBalloon();
+        }
+      },
+    );
   }
 
   void _showFeedback(String message) {

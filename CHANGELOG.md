@@ -13,6 +13,8 @@
   sprite strip instead of an invalid second-row frame.
 - Added a six-frame `player_fall_sheet.png` derived from the original BASIC
   `FALL` object and documented its provenance for the miss animation.
+- Integrated the fall strip into the miss flow with the original rightward
+  zig-zag and upward-exit movement before the next life or result screen.
 
 - Added the dependency-free deterministic `GameSession` rules core for Gate 2.
 - Added seeded selection, catch/miss, held-stack banking, pause, and terminal
