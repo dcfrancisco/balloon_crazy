@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
+import 'package:balloon_crazy/balloon_crazy.dart';
 import 'package:balloon_crazy/config.dart';
 
 /// The visible, non-interactive board of balloons.
@@ -10,7 +11,8 @@ import 'package:balloon_crazy/config.dart';
 /// The rules engine still owns the one active falling balloon. These sprites
 /// are only the remaining board presentation and never participate in
 /// collision or scoring.
-class BalloonField extends PositionComponent {
+class BalloonField extends PositionComponent
+    with HasGameReference<BalloonCrazy> {
   BalloonField() : super(size: Vector2(gameWidth, gameHeight));
 
   final Map<String, SpriteComponent> _balloons = {};
@@ -22,7 +24,10 @@ class BalloonField extends PositionComponent {
 
   @override
   void render(Canvas canvas) {
-    if (!visible) return;
+    // The board is a gameplay-only projection. Keep it out of the welcome,
+    // leaderboard, win, and game-over overlays even if a prior session left
+    // the presentation flag enabled. Pause remains in the playing state.
+    if (!visible || game.playState != PlayState.playing) return;
     super.render(canvas);
   }
 
