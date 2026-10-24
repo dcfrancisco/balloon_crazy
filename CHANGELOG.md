@@ -11,6 +11,8 @@
   hardening remain before the next release gate.
 - Corrected the balloon pop effect to use its actual three-frame horizontal
   sprite strip instead of an invalid second-row frame.
+- Added a six-frame `player_fall_sheet.png` derived from the original BASIC
+  `FALL` object and documented its provenance for the miss animation.
 
 - Added the dependency-free deterministic `GameSession` rules core for Gate 2.
 - Added seeded selection, catch/miss, held-stack banking, pause, and terminal

@@ -17,7 +17,7 @@ The current screenshots communicate the premise, but tiny downscaled sprites, a 
 
 | Asset | Current assessment | Planned disposition |
 |---|---|---|
-| `assets/images/player.png` | Strong recognizable design; 1024² source downscaled drastically | Keep as style reference; re-export approved pixel-scale frames |
+| `assets/images/player.png` | Strong recognizable design; 1024² source downscaled drastically | Keep as the ready pose; use the generated fall strip for miss feedback and re-export the full player atlas later |
 | `assets/images/red_balloon.png` | Used at runtime; 80×94 and stylistically close to current game | Keep as visual reference; normalize into atlas |
 | `balloon_red.png`, `balloon_green.png` | Different 48×64 set; unused | Do not ship in v1 unless provenance and future use are approved |
 | `balloon_pop.png` | 80×21 three-frame strip; frame metadata absent | Runtime now treats it as a named 3-frame horizontal pop sequence; provenance and final export remain open |
@@ -66,7 +66,14 @@ Use a single consistent grid/pixel density and transparent PNG atlas (or lossles
 - Collision shapes are authored separately in code/data; opaque bounds do not automatically define gameplay fairness.
 - Avoid text inside generated raster assets except the approved store/brand master.
 
-## Why sprites were not generated now
+## Generated first missing state
+
+`assets/images/player_fall_sheet.png` now supplies six stumble/tumble poses
+derived from the current player reference and the original `FALL` movement in
+`BALLOON.BAS`. It is intentionally a separate sheet so it can be reviewed or
+replaced without changing the ready pose.
+
+## Why the remaining sprites are not generated now
 
 The current task explicitly stops before implementation. Player footprint, catch plane, logical resolution, and animation timing are not yet approved through a playable vertical slice. Generating a full sheet now would either constrain those decisions or cause rework. Existing art is sufficient for the first functional slice; generate the missing production set immediately after the renderer/input scale gate.
 
