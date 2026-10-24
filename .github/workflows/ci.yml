@@ -1,0 +1,22 @@
+name: Gate 1 verification
+
+on:
+  push:
+    branches: [main, update-BALLOON.BAS]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  flutter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.35.7
+          channel: stable
+          cache: true
+      - name: Verify Gate 1
+        run: ./tool/verify.sh
