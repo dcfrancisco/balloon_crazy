@@ -1,14 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter/foundation.dart';
 import 'package:balloon_crazy/components/player.dart';
 import 'package:balloon_crazy/balloon_crazy.dart';
 import 'package:flame/components.dart';
 
 class _FakeGame extends BalloonCrazy {
-  // override heavy lifecycle pieces; we only need score and resetSP hook
-  @override
-  final ValueNotifier<int> score = ValueNotifier<int>(0);
-
   bool spResetCalled = false;
   @override
   void resetSPtoBase() {

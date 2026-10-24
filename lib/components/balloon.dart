@@ -12,11 +12,10 @@ class Balloon extends SpriteComponent
   Balloon({
     required Vector2 position,
     required Vector2 size,
-    required Vector2 velocity,
+    required this.velocity,
     required this.rowIndex,
     required this.columnIndex,
-  }) : velocity = velocity,
-       super(position: position, size: size, anchor: Anchor.center);
+  }) : super(position: position, size: size, anchor: Anchor.center);
 
   @override
   Future<void> onLoad() async {
