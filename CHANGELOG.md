@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.0+2 — GitHub Android APK
+## 1.0.0+3 — GitHub Android APK
 
 - Changed release scope to an Android-only downloadable GitHub APK; iOS and
   app-store gates are cancelled by ADR 0009.
