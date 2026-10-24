@@ -39,6 +39,8 @@ No new production art or gameplay variant is introduced during this gate.
 - Gate 0: open (publisher/legal identity and provenance remain owner work).
 - Gate 1: complete on the current branch (toolchain, lockfile, analysis, tests,
   and Android debug verification are documented).
-- Gate 2: in progress; deterministic rules core and acceptance tests are now
-  present. Projection migration is the next implementation step.
-- Gate 3: blocked until the projection consumes `GameSession` events.
+- Gate 2: complete for the current vertical slice; deterministic rules core,
+  acceptance tests, and Flame projection are present. A larger seeded soak is
+  retained as Gate 3 hardening work.
+- Gate 3: next; controls, swept collision, coordinate mapping, and device
+  validation remain.

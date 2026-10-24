@@ -16,9 +16,6 @@ class BalloonCrazy extends FlameGame
   late final Player player;
   late PlayArea playArea;
 
-  List<List<Balloon?>> balloonMatrix = [];
-  late TimerComponent balloonDropTimer;
-
   BalloonCrazy()
     : super(
         camera: CameraComponent.withFixedResolution(
@@ -121,19 +118,6 @@ class BalloonCrazy extends FlameGame
     spawnNextBalloon();
   }
 
-  void dropBalloon() {
-    final columnIndex = rand.nextInt(balloonMatrix.length);
-
-    for (int row = balloonMatrix[columnIndex].length - 1; row >= 0; row--) {
-      final balloon = balloonMatrix[columnIndex][row];
-      if (balloon != null && balloon.velocity == Vector2.zero()) {
-        balloon.velocity = Vector2(0, balloonDropSpeed);
-        balloonMatrix[columnIndex][row] = null;
-        break;
-      }
-    }
-  }
-
   void spawnNextBalloon() {
     session.startNext();
     final selected = session.activeBalloon;
@@ -159,34 +143,6 @@ class BalloonCrazy extends FlameGame
         columnIndex: selected.column,
       ),
     );
-  }
-
-  void startDroppingBalloons() {
-    if (playState != PlayState.playing) return;
-
-    final randomInterval = rand.nextDouble() * 2 + 1;
-    balloonDropTimer = TimerComponent(
-      period: randomInterval,
-      repeat: true,
-      onTick: () {
-        dropBalloon();
-        final matrixEmpty = balloonMatrix.every(
-          (column) => column.every((balloon) => balloon == null),
-        );
-        // Consider the game finished only when the matrix is empty and there
-        // are no balloons still falling (velocity.y > 0). Some balloon
-        // components may remain with zero velocity (stalled); those should
-        // not block the win condition.
-        final anyFalling = world.children.whereType<Balloon>().any(
-          (balloon) => balloon.velocity.y > 0,
-        );
-        if (matrixEmpty && !anyFalling) {
-          balloonDropTimer.removeFromParent();
-          playState = PlayState.won;
-        }
-      },
-    );
-    add(balloonDropTimer);
   }
 
   void onBalloonCaught(Balloon balloon) {

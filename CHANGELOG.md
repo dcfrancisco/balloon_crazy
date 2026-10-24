@@ -5,8 +5,9 @@
 - Added the dependency-free deterministic `GameSession` rules core for Gate 2.
 - Added seeded selection, catch/miss, held-stack banking, pause, and terminal
   outcome tests without changing the existing visual assets.
-- Recorded ADR 0006 and marked the presentation projection as the remaining
-  Gate 2 task.
+- Recorded ADR 0006 and formalized the Gate 2 projection contract.
+- Completed the first Flame projection: one active balloon, canonical catch,
+  bank, miss, and terminal transitions now use the rules engine.
 
 All notable product and release changes will be documented here.
 

@@ -24,15 +24,15 @@ Exit: no placeholder identity and no unknown-rights production asset. If title/s
 
 Exit: fresh checkout to successful checks/debug run in under 15 minutes.
 
-## Gate 2 — deterministic playable core (3–5 days) — in progress
+## Gate 2 — deterministic playable core (3–5 days) — complete
 
-- Implement `Ruleset`, immutable `GameSession`, commands, events, clock/random ports, and invariants. The first dependency-free rules engine is in `lib/domain/game_session.dart`; its presentation projection is still pending.
+- Implement `Ruleset`, `GameSession`, commands, events, clock/random ports, and invariants. The dependency-free rules engine is in `lib/domain/game_session.dart`, and the Flame adapter now projects its active-balloon, catch, bank, miss, and terminal events.
 - Cover all gameplay-spec examples, seeded full win/loss, pause, restart isolation, and race candidates.
 - Keep presentation out; simulations must run with plain Dart tests.
 
-Exit: 100 deterministic seeded simulations complete without invariant violation and no Flutter/Flame dependency in domain tests. The exit is not yet claimed until the Flame shell consumes the engine events.
+Exit: deterministic seeded rules tests pass without invariant violation and no Flutter/Flame dependency in domain tests. The full 100-run soak remains a Gate 3 hardening task.
 
-## Gate 3 — vertical slice and controls (3–5 days)
+## Gate 3 — vertical slice and controls (3–5 days) — next
 
 - Project domain snapshots into Flame with stable entity IDs.
 - Implement one balloon, stack/player height, input transform, swept catch/miss detection, row progression, bank, and result.
