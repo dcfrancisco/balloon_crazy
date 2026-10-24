@@ -74,6 +74,10 @@ class Player extends SpriteComponent
   }
 
   void catchBalloon(Balloon balloon) {
+    // Catching always uses the canonical MAN pose. The generated FALL sheet
+    // is reserved for misses so the player remains visually consistent while
+    // collecting balloons.
+    sprite = _readySprite;
     balloon.removeFromParent();
     heldBalloons++;
 
