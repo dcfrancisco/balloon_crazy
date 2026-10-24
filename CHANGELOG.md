@@ -1,6 +1,9 @@
 # Changelog
 
-## Unreleased (0.1.x)
+## 1.0.0+1 — GitHub Android APK
+
+- Changed release scope to an Android-only downloadable GitHub APK; iOS and
+  app-store gates are cancelled by ADR 0009.
 
 - Started Gate 4 Pass 1: added a visible held-balloon stack, catch/miss/bank
   feedback, and Android lifecycle-safe pause/resume behavior without changing

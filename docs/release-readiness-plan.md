@@ -5,7 +5,10 @@ Planning rule: finish each gate before expanding scope. Estimates are focused en
 
 Version milestones and tag rules are defined in `docs/versioning.md` and ADR 0005. This documentation baseline is version `0.1.0+1` and tag `v0.1.0-baseline.1`.
 
-## Gate 0 — owner decisions and legal clearance (parallel, blocking public beta)
+The target is now an Android-only downloadable GitHub APK. ADR 0009 cancels
+iOS and app-store gates for this project.
+
+## Gate 0 — owner decisions and legal clearance (cancelled for GitHub APK scope)
 
 - Choose legal publisher name and permanent reverse-DNS application ID.
 - Confirm Apple/Google developer-account ownership and signing-key custodian.
@@ -63,16 +66,16 @@ and the remaining production-asset/accessibility work stay open.
 
 Exit: game is understandable and satisfying with sound on or off, survives malformed preferences, and starts fully offline.
 
-## Gate 5 — mobile hardening (2–4 days)
+## Gate 5 — Android APK hardening (2–4 days)
 
 - Lock portrait/safe-area policy and validate lifecycle interruptions.
-- Configure permanent identifiers, release signing, icons, splash, versions, and production build settings.
+- Configure Android release build settings, version, icon, and splash. Store identifiers and store signing are out of scope.
 - Add golden/layout, asset-load, persistence migration, and focused Flame integration tests.
 - Run 30-minute soak and profile representative low/mid hardware.
 
 Exit: no P0/P1 issues; stable 60 Hz target under normal play; no leaked components/timers; signed internal artifacts accepted.
 
-## Gate 6 — store candidate (2–4 days plus review time)
+## Gate 6 — store candidate (cancelled for GitHub APK scope)
 
 - Complete privacy/support pages and store data/privacy declarations.
 - Prepare real-device screenshots, description, keywords, age/content ratings, attribution, and review notes.

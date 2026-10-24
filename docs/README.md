@@ -24,6 +24,7 @@ This directory is the decision and delivery baseline for turning the current pro
 | [0006](adr/0006-deterministic-rules-engine-and-gate-progression.md) | Accepted | Deterministic rules engine before presentation expansion |
 | [0007](adr/0007-fixed-viewport-and-swept-collision.md) | Accepted | Fixed-viewport input and swept vertical collision |
 | [0008](adr/0008-gate-4-game-feel-and-lifecycle.md) | Accepted | Gate 4 feedback and Android lifecycle-safe pause |
+| [0009](adr/0009-android-github-release-scope.md) | Accepted | Android-only downloadable APK release on GitHub |
 
 ## Authority order
 

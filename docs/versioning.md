@@ -29,8 +29,8 @@ Android receives `BUILD` as `versionCode`; iOS receives it as `CFBundleVersion`.
 | `0.2.0+N` | Playable alpha | Deterministic core and physical-device vertical slice complete |
 | `0.3.0+N` | Feature-complete alpha | Results, local leaderboard, lifecycle, settings, and core feedback complete |
 | `0.5.0+N` | Internal beta | Production assets/identity/signing integrated; no known P0/P1 issue |
-| `0.9.0+N` | Release candidate | Store metadata and both signed internal-track builds approved |
-| `1.0.0+N` | First public release | Product/legal/privacy/store sign-off complete |
+| `0.9.0+N` | Release candidate | Android release APK and owner acceptance complete |
+| `1.0.0+N` | First public GitHub APK release | Playable Android game, release APK, checksum, and owner sign-off complete |
 
 Versions are gates, not dates. Do not bump because time passed.
 
@@ -51,7 +51,7 @@ Rules:
 1. A tag points to the exact reviewed commit used for the milestone.
 2. Never move, delete, or reuse a published tag. Correct mistakes with a new tag/build.
 3. Except for the explicitly unverified baseline tag, create a tag only after required checks pass.
-4. Store submissions also record the full `pubspec.yaml` version/build in release notes.
+4. GitHub releases record the full `pubspec.yaml` version/build in release notes.
 5. Push the commit before or with its tag; verify the remote tag after pushing.
 6. Patch releases increment `PATCH`; new uploads always increment `BUILD` even when the product version is unchanged.
 
@@ -69,6 +69,6 @@ Rules:
 3. Run the required automated and physical-device checks.
 4. Commit using `chore(release): prepare X.Y.Z+N`.
 5. Create an annotated tag and include check/store status in its message.
-6. Push the commit and tag only after local verification. Store upload follows the pushed tag.
+6. Push the commit and tag only after local verification. The GitHub release workflow attaches the APK and checksum.
 
 The baseline is the exception: its purpose is to preserve the known broken starting point before repair. Its annotation must say that Flutter commands were blocked by the configured Dart VM/toolchain.
