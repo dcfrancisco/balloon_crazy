@@ -44,8 +44,8 @@ void main() {
       right.startNext();
       leftColumns.add(left.activeBalloon!.column);
       rightColumns.add(right.activeBalloon!.column);
-      left.missActive();
-      right.missActive();
+      left.catchActive();
+      right.catchActive();
     }
     expect(leftColumns, rightColumns);
   });
