@@ -23,5 +23,9 @@ jobs:
           flutter-version: 3.35.7
           channel: stable
           cache: true
+      - name: Install pinned Android SDK components
+        run: |
+          yes | sdkmanager --licenses >/dev/null || true
+          sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0" "ndk;27.0.12077973"
       - name: Verify Gate 1
         run: ./tool/verify.sh
