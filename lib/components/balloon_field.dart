@@ -20,7 +20,16 @@ class BalloonField extends PositionComponent
   bool _ready = false;
   // The board is opt-in: BalloonCrazy enables it only for an active game.
   // This prevents async asset loading from flashing balloons on menus/results.
-  bool visible = false;
+  bool _visible = false;
+
+  bool get visible => _visible;
+
+  set visible(bool value) {
+    _visible = value;
+    for (final balloon in _balloons.values) {
+      balloon.opacity = value ? 1 : 0;
+    }
+  }
 
   @override
   void render(Canvas canvas) {
@@ -58,6 +67,7 @@ class BalloonField extends PositionComponent
           ),
           size: balloonSize,
         );
+        component.opacity = _visible ? 1 : 0;
         _balloons[_key(row, column)] = component;
         add(component);
       }
