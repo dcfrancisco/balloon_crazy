@@ -15,6 +15,8 @@
   `FALL` object and documented its provenance for the miss animation.
 - Integrated the fall strip into the miss flow with the original rightward
   zig-zag and upward-exit movement before the next life or result screen.
+- Regenerated the fall strip from the canonical `player.png` character so
+  catch and miss states use one consistent player design.
 
 - Added the dependency-free deterministic `GameSession` rules core for Gate 2.
 - Added seeded selection, catch/miss, held-stack banking, pause, and terminal

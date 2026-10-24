@@ -8,8 +8,9 @@ Date: 2026-10-25
   integrated into the playable miss flow.
 - Source reference: the existing `assets/images/player.png` character sprite.
 - Behavior reference: `FALL` in `assets/BALLOON.BAS`, lines 300 and 440–550.
-- Generated with the Codex built-in image generation tool from the approved
-  character reference and the game's existing pixel-art constraints.
+- Regenerated with the Codex built-in image generation tool using the exact
+  `player.png` character as the visual reference, so the miss poses retain the
+  same man used during catches.
 - Post-processing: cropped to six equal 362×400 frame cells; preserved as an
   RGBA PNG with transparent background.
 - License/provenance status: generated derivative; retain this record with any
