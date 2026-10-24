@@ -16,7 +16,7 @@ The latest stable channel may move after this record. Do not silently change the
 | Tool | Observed | Gate 1 implication |
 |---|---|---|
 | Flutter/Dart | Flutter 3.3.0 / Dart 3.3.4; VM crashes with `cpuinfo_macos.cc:42 unreachable code` | Cannot use; replace/select pinned SDK |
-| Java | OpenJDK 21.0.10 | Suitable for the current Gradle/Android setup unless build reports otherwise |
+| Java | Local OpenJDK 21.0.10; CI pinned to Temurin 17 | Android/Gradle verification uses Java 17 because hosted runners may default to unsupported newer JDKs |
 | Gradle wrapper | 8.12 | Keep project wrapper; let the pinned Flutter/AGP combination validate it |
 | Android SDK/platform tools | ADB 36.0.0; compile/target values are Flutter defaults | Android build must confirm installed platform availability |
 | CocoaPods | 1.16.2 | Available; terminal should use UTF-8 locale |

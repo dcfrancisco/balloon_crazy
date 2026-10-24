@@ -14,6 +14,7 @@ All notable product and release changes will be documented here.
 
 - Pinned Flutter 3.35.7 stable and bundled Dart 3.9.x through `.fvmrc`, project constraints, and CI; compatible with the current macOS 12 host.
 - Added the resolved `pubspec.lock` and replaced the generated counter test with game welcome/overlay smoke coverage.
+- Pinned CI Android builds to Java 17 for Gradle/AGP compatibility.
 - Added `./tool/verify.sh` for dependency resolution, formatting, analysis, tests, and Android debug verification.
 - Added minimal GitHub Actions verification.
 - Recorded the local Xcode 14.2 limitation as an environment-only iOS release blocker.
