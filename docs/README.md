@@ -27,6 +27,12 @@ This directory is the decision and delivery baseline for turning the current pro
 | [0007](adr/0007-fixed-viewport-and-swept-collision.md) | Accepted | Fixed-viewport input and swept vertical collision |
 | [0008](adr/0008-gate-4-game-feel-and-lifecycle.md) | Accepted | Gate 4 feedback and Android lifecycle-safe pause |
 | [0009](adr/0009-android-github-release-scope.md) | Accepted | Android-only downloadable APK release on GitHub |
+| [0010](adr/0010-version-2-scope-and-compatibility.md) | Accepted for planning | V2 adds content around the stable V1 ruleset |
+| [0011](adr/0011-deterministic-level-content-and-balance.md) | Accepted for planning | Level counts, speeds, sway, hazards, and seeds are data-driven |
+| [0012](adr/0012-objectives-and-progression-contract.md) | Accepted for planning | Explicit objectives and three-star offline progression |
+| [0013](adr/0013-sprite-pipeline-and-asset-provenance.md) | Accepted for planning | Versioned, provenance-cleared sprites with stable collision contracts |
+| [0014](adr/0014-v2-screen-flow-and-visibility-rules.md) | Accepted for planning | The balloon board exists only during play and pause |
+| [0015](adr/0015-playtest-led-balance-and-release-evidence.md) | Accepted for planning | Expand V2 from measured playtest evidence |
 
 ## Authority order
 
