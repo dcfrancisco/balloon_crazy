@@ -1,8 +1,7 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
-import 'package:balloon_crazy/v2/v2_level_one_controller.dart';
+import 'package:balloon_crazy/features/adventure/application/level_one_controller.dart';
 
 class V2LevelOneScreen extends StatefulWidget {
   const V2LevelOneScreen({super.key});
@@ -11,33 +10,52 @@ class V2LevelOneScreen extends StatefulWidget {
   State<V2LevelOneScreen> createState() => _V2LevelOneScreenState();
 }
 
-class _V2LevelOneScreenState extends State<V2LevelOneScreen> {
+class _V2LevelOneScreenState extends State<V2LevelOneScreen>
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late final V2LevelOneController controller;
-  Timer? _timer;
+  late final Ticker _ticker;
+  Duration _previousFrame = Duration.zero;
 
   @override
   void initState() {
     super.initState();
-    controller = V2LevelOneController()..addListener(_onChanged);
+    WidgetsBinding.instance.addObserver(this);
+    controller = V2LevelOneController();
+    _ticker = createTicker(_onFrame);
   }
 
   @override
   void dispose() {
-    _timer?.cancel();
-    controller
-      ..removeListener(_onChanged)
-      ..dispose();
+    WidgetsBinding.instance.removeObserver(this);
+    _ticker.dispose();
+    controller.dispose();
     super.dispose();
   }
 
-  void _onChanged() => setState(() {});
-
   void _beginLevel() {
     controller.begin();
-    _timer ??= Timer.periodic(
-      const Duration(milliseconds: 16),
-      (_) => controller.tick(1 / 60),
-    );
+    _previousFrame = Duration.zero;
+    _ticker.start();
+  }
+
+  void _onFrame(Duration elapsed) {
+    final delta = elapsed - _previousFrame;
+    _previousFrame = elapsed;
+    final seconds = delta.inMicroseconds / Duration.microsecondsPerSecond;
+    controller.tick(seconds.clamp(0, 0.05));
+    if (controller.phase == V2LevelOnePhase.results) _ticker.stop();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      if (controller.phase == V2LevelOnePhase.playing && !_ticker.isActive) {
+        _previousFrame = Duration.zero;
+        _ticker.start();
+      }
+      return;
+    }
+    if (_ticker.isActive) _ticker.stop();
   }
 
   @override
@@ -52,11 +70,14 @@ class _V2LevelOneScreenState extends State<V2LevelOneScreen> {
           ),
         ),
         child: SafeArea(
-          child: Column(
-            children: [
-              _V2Header(controller: controller),
-              Expanded(child: _buildState(context)),
-            ],
+          child: AnimatedBuilder(
+            animation: controller,
+            builder: (context, _) => Column(
+              children: [
+                _V2Header(controller: controller),
+                Expanded(child: _buildState(context)),
+              ],
+            ),
           ),
         ),
       ),
@@ -76,8 +97,8 @@ class _V2LevelOneScreenState extends State<V2LevelOneScreen> {
 
   void _replay() {
     controller.restart();
-    _timer?.cancel();
-    _timer = null;
+    if (_ticker.isActive) _ticker.stop();
+    _previousFrame = Duration.zero;
   }
 }
 

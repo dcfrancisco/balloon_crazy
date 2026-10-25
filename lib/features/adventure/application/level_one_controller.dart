@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 
-import 'package:balloon_crazy/domain/v2/level_definition.dart';
-import 'package:balloon_crazy/domain/v2/v2_levels.dart';
+import 'package:balloon_crazy/features/adventure/domain/level_catalog.dart';
+import 'package:balloon_crazy/features/adventure/domain/level_definition.dart';
 
 enum V2LevelOnePhase { briefing, playing, results }
 

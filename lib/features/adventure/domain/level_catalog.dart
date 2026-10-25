@@ -1,4 +1,4 @@
-import 'level_definition.dart';
+import 'package:balloon_crazy/features/adventure/domain/level_definition.dart';
 
 const v2Levels = <V2LevelDefinition>[
   V2LevelDefinition(
@@ -117,4 +117,3 @@ V2LevelDefinition? v2LevelByNumber(int number) {
   }
   return null;
 }
-

@@ -113,8 +113,7 @@ class V2LevelDefinition {
     if (tuning.swayPercent < 0 || tuning.swayPercent > 100) {
       errors.add('Sway percent must be between 0 and 100.');
     }
-    if (tuning.midpointRampPercent < 0 ||
-        tuning.midpointRampPercent > 10) {
+    if (tuning.midpointRampPercent < 0 || tuning.midpointRampPercent > 10) {
       errors.add('Midpoint speed ramp cannot exceed 10%.');
     }
     if (tuning.expectedDurationSeconds.minimum < 1 ||
@@ -125,4 +124,3 @@ class V2LevelDefinition {
     return errors;
   }
 }
-

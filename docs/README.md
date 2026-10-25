@@ -34,6 +34,7 @@ This directory is the decision and delivery baseline for turning the current pro
 | [0014](adr/0014-v2-screen-flow-and-visibility-rules.md) | Accepted for planning | The balloon board exists only during play and pause |
 | [0015](adr/0015-playtest-led-balance-and-release-evidence.md) | Accepted for planning | Expand V2 from measured playtest evidence |
 | [0016](adr/0016-v2-visual-identity-and-board-art.md) | Accepted for implementation | Bright arcade-adventure identity with readable layered boards |
+| [0017](adr/0017-freeze-v1-and-use-feature-first-v2-architecture.md) | Accepted for implementation | Freeze V1 and build V2 with feature-first boundaries |
 
 ## Authority order
 

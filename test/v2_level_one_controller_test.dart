@@ -1,5 +1,5 @@
-import 'package:balloon_crazy/domain/v2/v2_levels.dart';
-import 'package:balloon_crazy/v2/v2_level_one_controller.dart';
+import 'package:balloon_crazy/features/adventure/application/level_one_controller.dart';
+import 'package:balloon_crazy/features/adventure/domain/level_catalog.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

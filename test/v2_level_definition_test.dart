@@ -1,5 +1,5 @@
-import 'package:balloon_crazy/domain/v2/level_definition.dart';
-import 'package:balloon_crazy/domain/v2/v2_levels.dart';
+import 'package:balloon_crazy/features/adventure/domain/level_catalog.dart';
+import 'package:balloon_crazy/features/adventure/domain/level_definition.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -17,10 +17,18 @@ void main() {
     });
 
     test('difficulty increases across the first slice', () {
-      expect(v2Levels[0].tuning.startSpeed, lessThan(v2Levels[1].tuning.startSpeed));
-      expect(v2Levels[1].tuning.startSpeed, lessThan(v2Levels[2].tuning.startSpeed));
-      expect(v2Levels[0].tuning.spawnGapSeconds,
-          greaterThan(v2Levels[2].tuning.spawnGapSeconds));
+      expect(
+        v2Levels[0].tuning.startSpeed,
+        lessThan(v2Levels[1].tuning.startSpeed),
+      );
+      expect(
+        v2Levels[1].tuning.startSpeed,
+        lessThan(v2Levels[2].tuning.startSpeed),
+      );
+      expect(
+        v2Levels[0].tuning.spawnGapSeconds,
+        greaterThan(v2Levels[2].tuning.spawnGapSeconds),
+      );
       expect(v2Levels[0].tuning.swayPercent, 0);
       expect(v2Levels[2].tuning.swayPercent, 8);
     });
@@ -70,4 +78,3 @@ void main() {
     });
   });
 }
-
