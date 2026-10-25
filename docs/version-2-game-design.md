@@ -158,6 +158,39 @@ Difficulty is tuned with four visible variables, not hidden randomness:
 
 Difficulty may also add a second path or a taller target stack, but never changes the player hitbox without communicating it.
 
+### Exact level tuning (first playable pass)
+
+The values below are the starting balance sheet for implementation. `Total balloons`
+includes balloons that can be missed; `target` is what the player must catch or bank.
+Speed is the starting downward speed in logical pixels per second at the reference
+viewport. A level may gently ramp speed by up to 10% after its midpoint, but it must
+never exceed the listed maximum during the first balance pass.
+
+| Level | Total balloons | Target | Spawn gap | Start speed | Max speed | Sway | Hazards | Expected time |
+| ---: | ---: | --- | ---: | ---: | ---: | --- | --- | ---: |
+| 1 First Lift | 10 | Catch 8 | 1.20 s | 150 | 165 | 0% | None | 45–60 s |
+| 2 Safe Stack | 12 | Bank 4 | 1.15 s | 155 | 170 | 5% | None | 50–65 s |
+| 3 Keep Moving | 16 | Score 180 | 1.00 s | 175 | 195 | 8% | None | 55–70 s |
+| 4 Gold Meadow | 18 | Catch 2 gold | 1.00 s | 175 | 200 | 8% | None | 60–75 s |
+| 5 Wobble Bridge | 20 | Bank 7 | 0.95 s | 185 | 210 | 15% | None | 60–75 s |
+| 6 Crystal Lake | 22 | Catch 12 | 0.90 s | 195 | 225 | 18% | None | 60–80 s |
+| 7 Storm Warning | 24 | Finish with 3 lives | 0.90 s | 200 | 235 | 20% | 2 skulls | 65–80 s |
+| 8 Combo Trail | 26 | Reach ×5 combo | 0.85 s | 210 | 245 | 22% | 2 skulls | 65–85 s |
+| 9 Rainbow Run | 28 | Collect 2 rainbow | 0.82 s | 220 | 260 | 25% | 3 skulls | 70–85 s |
+| 10 Split Path | 30 | Score 700 | 0.78 s | 230 | 275 | 28% | 4 skulls | 70–90 s |
+| 11 Long Stack | 34 | Bank 10 | 0.72 s | 245 | 295 | 32% | 5 skulls | 75–90 s |
+| 12 Balloon Summit | 40 | Complete all objectives | 0.65 s | 260 | 315 | 35% | 6 patterned skulls | 80–90 s |
+
+Balancing rules:
+
+- At least 20% of balloons must be safely catchable on every level.
+- The first three levels never spawn hazards or require a special balloon.
+- A missed balloon is recoverable; a skull is telegraphed with a sound and flash.
+- If playtesting shows fewer than 70% of new players completing a level after three
+  attempts, reduce speed by 10% before reducing the objective.
+- If more than 90% complete a level on the first attempt, increase the spawn gap
+  difficulty or add one optional objective before increasing speed.
+
 ## 9. Level plan
 
 The first V2 release should ship one region with twelve short levels. Each level takes 45–90 seconds and teaches one idea before combining it.
@@ -236,4 +269,3 @@ Keep the menu slot only as a future placeholder. Do not design networking, match
 ## 14. Deliberate non-goals
 
 V2 is not a content-heavy live service. It will not add ads, purchases, accounts, online multiplayer, cloud saves, or procedural generation until the one-player loop is fun, readable, and stable.
-
